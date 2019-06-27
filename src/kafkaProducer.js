@@ -3,7 +3,7 @@ const KafkaProducer = require('no-kafka');
 console.log('KAFKA entered kafkaProducer.js');
 
 // LOCALHOST...
-const producer = new KafkaProducer.Producer();
+// const producer = new KafkaProducer.Producer();
 
 // Heroku
 const producer = new KafkaProducer.Producer({
