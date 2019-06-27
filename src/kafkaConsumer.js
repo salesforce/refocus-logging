@@ -26,6 +26,6 @@ consumer.init();
 
 module.exports = {
   subscribe: (handler) => {
-    consumer.subscribe('ping', handler);
+    consumer.subscribe('cimarron-86176.ping', handler);
   },
 };
