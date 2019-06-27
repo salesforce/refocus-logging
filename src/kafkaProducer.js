@@ -18,8 +18,8 @@ producer.init();
 
 module.exports = {
   sendPing: (key, value) => producer.send({
-    topic: 'cimarron-86176.ping',
-    partition: 0,
+    topic: 'ping',
+    partition: 1,
     message: {
       key,
       value: JSON.stringify(value),
