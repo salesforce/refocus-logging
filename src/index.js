@@ -9,12 +9,9 @@
 const kafkaProducer = require('./kafkaProducer');
 const kafkaConsumer = require('./kafkaConsumer');
 
-let i;
-for (i = 0; i < 10; i++) {
-  setTimeout(() => {
-    kafkaProducer.sendPing('key', 'value');
-  }, 1000);
-};
+kafkaProducer.sendPing('key', 'value');
+
+
 
 const clientId = 'consumer-' + process.pid;
 kafkaConsumer.subscribe((messageSet, topic) => {
