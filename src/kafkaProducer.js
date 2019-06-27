@@ -1,6 +1,4 @@
-const debug = require('debug')('k');
 const KafkaProducer = require('no-kafka');
-const debug = require('debug')('refocus-logging');
 
 console.log('KAFKA entered kafkaProducer.js');
 
@@ -8,13 +6,13 @@ console.log('KAFKA entered kafkaProducer.js');
 const producer = new KafkaProducer.Producer();
 
 // Heroku
-// const producer = new KafkaProducer.Producer({
-//   connectionString: process.env.KAFKA_URL,
-//   ssl: {
-//     cert: process.env.KAFKA_CLIENT_CERT || '.ssl/client.crt',
-//     key: process.env.KAFKA_CLIENT_CERT_KEY || '.ssl/client.key',
-//   },
-// });
+const producer = new KafkaProducer.Producer({
+  connectionString: process.env.KAFKA_URL,
+  ssl: {
+    cert: process.env.KAFKA_CLIENT_CERT || '.ssl/client.crt',
+    key: process.env.KAFKA_CLIENT_CERT_KEY || '.ssl/client.key',
+  },
+});
 
 producer.init();
 
@@ -26,6 +24,6 @@ module.exports = {
       key,
       value: JSON.stringify(value),
     },
-  }).then((res) => debug('kafkaProducer|Sent|%o', res)),
+  }).then((res) => console.log('kafkaProducer|Sent|%o', res)),
 };
 

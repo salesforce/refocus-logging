@@ -8,7 +8,6 @@
 
 const kafkaProducer = require('./kafkaProducer');
 const kafkaConsumer = require('./kafkaConsumer');
-const debug = require('debug')('refocus-logging');
 
 let i;
 for (i = 0; i < 10; i++) {
@@ -17,15 +16,12 @@ for (i = 0; i < 10; i++) {
   }, 1000);
 };
 
-
 const clientId = 'consumer-' + process.pid;
-kafkaConsumer.subscribe((messageSet, topic, partition) => {
-  debug('emitViaKafka|subscribe %s topic=%s partition=%s numMessages=%d',
-    clientId, topic, partition, messageSet.length);
+kafkaConsumer.subscribe((messageSet, topic) => {
   messageSet.forEach((m) => {
     const key = m.message.key.toString();
     const value = JSON.parse(m.message.value.toString());
-    console.log(key, value);
+    console.log('Message from topic', topic, key, value);
   });
 });
 
