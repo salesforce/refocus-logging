@@ -18,7 +18,7 @@ producer.init();
 
 module.exports = {
   sendPing: (key, value) => producer.send({
-    topic: 'cimarron-86176.ping',
+    topic: DEFAULT_TOPIC,
     partition: 0,
     message: {
       key,

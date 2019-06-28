@@ -6,19 +6,16 @@
  * https://opensource.org/licenses/BSD-3-Clause
  */
 
-const kafkaProducer = require('./kafkaProducer');
 const kafkaConsumer = require('./kafkaConsumer');
-
-kafkaProducer.sendPing('key', 'value');
-
-
+const logger = require('winston');
 
 const clientId = 'consumer-' + process.pid;
-kafkaConsumer.subscribe((messageSet, topic) => {
-  messageSet.forEach((m) => {
-    const key = m.message.key.toString();
-    const value = JSON.parse(m.message.value.toString());
-    console.log('Message from topic', topic, key, value);
-  });
-});
+logger.debug(`Starting client ${clientId}`);
 
+// As of now, for each topic, we are going to use the same handler, this might change in the future
+// For each topic, start a subscription, that upon recieving
+// a message executes the default handler method
+let topic;
+for (topic in kafkaConsumer.topicHandlers) {
+  kafkaConsumer.topicHandlers.topic(defaultHandler);
+}

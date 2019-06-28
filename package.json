@@ -18,9 +18,10 @@
   },
   "homepage": "https://github.com/salesforce/refocus-logging#readme",
   "dependencies": {
+    "chai": "^4.2.0",
     "debug": "^4.1.1",
-    "express": "^4.17.1",
     "jscs": "^3.0.7",
-    "no-kafka": "^3.4.3"
+    "no-kafka": "^3.4.3",
+    "winston": "^3.2.1"
   }
 }
