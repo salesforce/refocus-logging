@@ -1,12 +1,12 @@
 const Kafka = require('no-kafka');
 const logger = require('winston');
-
+const utils = require('../utils');
+const debug = require('debug')('refocus-logging');
 
 const clientId = 'consumer-' + process.pid;
 
-
 // We will supply topics as a comma seperated list of values
-const topics = process.env.TOPICS ? process.env.TOPICS.split(', ') : [DEFAULT_TOPIC];
+const topics = utils.topic;
 
 // FOR LOCALHOST...
 // const consumer = new Kafka.SimpleConsumer({
@@ -16,10 +16,10 @@ const topics = process.env.TOPICS ? process.env.TOPICS.split(', ') : [DEFAULT_TO
 // FOR HEROKU...
 const consumer = new Kafka.SimpleConsumer({
   clientId,
-  connectionString: process.env.KAFKA_URL.replace(/\+ssl/g, ''),
+  connectionString: utils.connectionString,
   ssl: {
-    cert: process.env.KAFKA_CLIENT_CERT || '.ssl/client.crt',
-    key: process.env.KAFKA_CLIENT_CERT_KEY || '.ssl/client.key',
+    cert: utils.sslCert,
+    key: utils.sslKey,
   },
 
   // maxWaitTime: +process.env.KAFKA_CONSUMER_MAX_WAIT_TIME_MS || 100,
@@ -27,7 +27,8 @@ const consumer = new Kafka.SimpleConsumer({
   // idleTimeout: +process.env.KAFKA_CONSUMER_IDLE_TIMEOUT || 1000,
 });
 
-console.log(`Kafka consumer ${clientId} has been started`);
+logger.debug(`Kafka consumer ${clientId} has been started`);
+debug('Kafka Consumer %s %o', clientId, consumer);
 
 consumer.init();
 

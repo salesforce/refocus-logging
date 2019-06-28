@@ -2,6 +2,7 @@ const chai = require('chai').expect;
 const KafkaProducer = require('no-kafka');
 const kafkaConsumer = require('../kafkaConsumer');
 const logger = require('winston');
+const utils = require('../utils');
 
 // set up producer
 
@@ -10,10 +11,10 @@ const logger = require('winston');
 
 // Heroku
 const producer = new KafkaProducer.Producer({
-  connectionString: process.env.KAFKA_URL,
+  connectionString: utils.connectionString,
   ssl: {
-    cert: process.env.KAFKA_CLIENT_CERT || '.ssl/client.crt',
-    key: process.env.KAFKA_CLIENT_CERT_KEY || '.ssl/client.key',
+    cert: utils.sslCert,
+    key: utils.sslKey,
   },
 });
 
