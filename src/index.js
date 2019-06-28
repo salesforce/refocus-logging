@@ -17,7 +17,7 @@ debug(`Starting client ${clientId}`);
 // For each topic, start a subscription, that upon recieving
 // a message executes the default handler method
 let topic;
-for (topic in kafkaConsumer.topicHandlers) {
+for (topic in kafkaConsumer.topicsHandlers) {
   const handler = utils.specialHandlers[topic] ? specialHandlers[topic] : defaultHandler;
-  kafkaConsumer.topicHandlers.topic(handler);
+  kafkaConsumer.topicsHandlers.topic(handler);
 }

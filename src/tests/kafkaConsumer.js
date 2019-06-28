@@ -4,8 +4,7 @@ const kafkaConsumer = require('../kafkaConsumer');
 const logger = require('winston');
 const utils = require('../utils');
 
-// set up producer
-
+// Set up producer
 // LOCALHOST...
 // const producer = new KafkaProducer.Producer();
 
@@ -42,4 +41,3 @@ describe('src/tests/consumer.js', () => {
     });
   });
 });
-

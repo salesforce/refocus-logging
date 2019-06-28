@@ -40,7 +40,7 @@ const topicsHandler = topics.reduce((obj, topic) => {
 }, {});
 
 module.exports = {
-  topicHandlers,
+  topicsHandler,
   testTopicHandler: (handler) => {
     consumer.subscribe(DEFAULT_TOPIC, handler);
   },
