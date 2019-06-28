@@ -7,7 +7,7 @@
  */
 const debug = require('debug')('refocus-logging');
 const kafkaConsumer = require('./kafkaConsumer');
-const logger = require('winston');
+const logger = require('pino')();
 const utils = require('./utils');
 
 const clientId = 'consumer-' + process.pid;

@@ -48,3 +48,6 @@ dump.rdb
 
 # Ignore .DS_Store files created by Mac finder
 .DS_Store
+
+# Ignore the kafka installation
+kafka_2.12-2.3.0

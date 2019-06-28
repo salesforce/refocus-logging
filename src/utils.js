@@ -1,12 +1,4 @@
-const logger = require('winston');
-
-const DEFAULT_TOPIC = 'cimarron-86176.ping';
-
-const topics = process.env.TOPICS ? process.env.TOPICS.split(', ') : [DEFAULT_TOPIC];
-
-const sslCert = process.env.KAFKA_CLIENT_CERT || '.ssl/client.crt';
-const sslKey = process.env.KAFKA_CLIENT_CERT_KEY || '.ssl/client.key';
-const connectionString = process.env.KAFKA_URL.replace(/\+ssl/g, '');
+const logger = require('pino')();
 
 // The default handler just logs out the message
 const defaultHandler = (messageSet, topic, partition) => {
@@ -19,5 +11,20 @@ const defaultHandler = (messageSet, topic, partition) => {
 
 // Populate this as required
 const specialHandlers = {
+};
 
+const getConfig = (env) => ({
+  topics: env.TOPICS.split(',').map((string) => string.trim()),
+  sslCert: env.KAFKA_CLIENT_CERT || '.ssl/client.crt',
+  sslKey: env.KAFKA_CLIENT_CERT_KEY || '.ssl/client.key',
+  connectionString: env.KAFKA_URL.replace(/\+ssl/g, ''),
+  maxWaitTime: env.KAFKA_CONSUMER_MAX_WAIT_TIME_MS || 100,
+  maxBytes: env.KAFKA_CONSUMER_MAX_BYTES || (1024 * 1024),
+  idleTimeout: env.KAFKA_CONSUMER_IDLE_TIMEOUT || 1000,
+});
+
+module.exports = {
+  getConfig,
+  defaultHandler,
+  specialHandlers,
 };

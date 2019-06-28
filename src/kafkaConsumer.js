@@ -1,12 +1,12 @@
 const Kafka = require('no-kafka');
-const logger = require('winston');
-const utils = require('../utils');
+const logger = require('pino')();
+const utils = require('./utils');
 const debug = require('debug')('refocus-logging');
 
 const clientId = 'consumer-' + process.pid;
 
 // We will supply topics as a comma seperated list of values
-const topics = utils.topic;
+
 
 // FOR LOCALHOST...
 // const consumer = new Kafka.SimpleConsumer({
@@ -14,18 +14,23 @@ const topics = utils.topic;
 // });
 
 // FOR HEROKU...
-const consumer = new Kafka.SimpleConsumer({
+
+const createConsumer = (config) => new Kafka.SimpleConsumer({
   clientId,
-  connectionString: utils.connectionString,
+  connectionString: config.connectionString,
   ssl: {
-    cert: utils.sslCert,
-    key: utils.sslKey,
+    cert: config.sslCert,
+    key: config.sslKey,
   },
 
-  // maxWaitTime: +process.env.KAFKA_CONSUMER_MAX_WAIT_TIME_MS || 100,
-  // maxBytes: +process.env.KAFKA_CONSUMER_MAX_BYTES || (1024 * 1024),
-  // idleTimeout: +process.env.KAFKA_CONSUMER_IDLE_TIMEOUT || 1000,
+  maxWaitTime: config.maxWaitTime,
+  maxBytes: config.maxBytes,
+  idleTimeout: config.idleTimeout,
 });
+
+const config = utils.getConfig(process.env);
+debug('The config is', config);
+const consumer = createConsumer(config);
 
 logger.debug(`Kafka consumer ${clientId} has been started`);
 debug('Kafka Consumer %s %o', clientId, consumer);
@@ -41,7 +46,5 @@ const topicsHandler = topics.reduce((obj, topic) => {
 
 module.exports = {
   topicsHandler,
-  testTopicHandler: (handler) => {
-    consumer.subscribe(DEFAULT_TOPIC, handler);
-  },
+  createConsumer, // for testing only
 };
