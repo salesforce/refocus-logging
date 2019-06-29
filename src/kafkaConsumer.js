@@ -5,17 +5,10 @@ const debug = require('debug')('refocus-logging');
 
 const clientId = 'consumer-' + process.pid;
 
-// We will supply topics as a comma seperated list of values
-
-
-// FOR LOCALHOST...
-// const consumer = new Kafka.SimpleConsumer({
-//   idleTimeout: 10,
-// });
-
-// FOR HEROKU...
-
-const createConsumer = (config) => new Kafka.SimpleConsumer({
+// make a mock out of this instance and expect it to be called it with passed in requirements
+const config = utils.getConfig(process.env);
+debug('The config is', config);
+const consumer = new Kafka.SimpleConsumer({
   clientId,
   connectionString: config.connectionString,
   ssl: {
@@ -27,10 +20,6 @@ const createConsumer = (config) => new Kafka.SimpleConsumer({
   maxBytes: config.maxBytes,
   idleTimeout: config.idleTimeout,
 });
-
-const config = utils.getConfig(process.env);
-debug('The config is', config);
-const consumer = createConsumer(config);
 
 logger.debug(`Kafka consumer ${clientId} has been started`);
 debug('Kafka Consumer %s %o', clientId, consumer);
@@ -46,5 +35,4 @@ const topicsHandler = topics.reduce((obj, topic) => {
 
 module.exports = {
   topicsHandler,
-  createConsumer, // for testing only
 };
