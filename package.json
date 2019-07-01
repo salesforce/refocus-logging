@@ -4,7 +4,7 @@
   "description": "Common logging service for Refocus and its associated services.",
   "main": "src/index.js",
   "scripts": {
-    "test": "TOPICS=kafka-test-topic mocha test --recursive",
+    "test": "mocha test/kafkaConsumer.js",
     "start": "node src/."
   },
   "repository": {

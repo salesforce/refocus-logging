@@ -17,7 +17,6 @@ const producer = new KafkaProducer.Producer({
 
 producer.init();
 
-const producer = sinon.fake();
 
 const sendPing = (key, value, topic) => producer.send({
   topic,
