@@ -1,4 +1,3 @@
-const chai = require('chai').expect;
 const KafkaProducer = require('no-kafka');
 const kafkaConsumer = require('../src/kafkaConsumer');
 const logger = require('pino')();
@@ -17,7 +16,6 @@ const producer = new KafkaProducer.Producer({
 
 producer.init();
 
-
 const sendPing = (key, value, topic) => producer.send({
   topic,
   partition: 0,
@@ -35,9 +33,9 @@ describe('src/tests/consumer.js', () => {
       messageSet.forEach((m) => {
         const key = m.message.key.toString();
         const value = JSON.parse(m.message.value.toString());
-        expect(topic).to.equal(utils.testTopic);
-        expect(key).to.equal('key');
-        expect(value).to.equal('value');
+        expect(topic).toEqual(utils.testTopic);
+        expect(key).toEqual('key');
+        expect(value).toEqual('value');
       });
     };
 

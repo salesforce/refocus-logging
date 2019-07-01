@@ -7,7 +7,7 @@ const clientId = 'consumer-' + process.pid;
 
 // make a mock out of this instance and expect it to be called it with passed in requirements
 const config = utils.getConfig(process.env.isProd ? process.env : {
-  TOPICS: 'test',
+  TOPICS: 'test,foo',
   KAFKA_CLIENT_CERT: 'test-cert',
   KAFKA_CLIENT_CERT_KEY: 'test-key',
   KAFKA_URL: 'test-url',
