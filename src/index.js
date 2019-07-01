@@ -7,17 +7,27 @@
  */
 const debug = require('debug')('refocus-logging');
 const kafkaConsumer = require('./kafkaConsumer');
-const logger = require('pino')();
 const utils = require('./utils');
+const logger = require('pino')();
 
-const clientId = 'consumer-' + process.pid;
-debug(`Starting client ${clientId}`);
+
+const clientId = ;
+debug(`Starting client ${clientId} consumer-${process.pid}`);
+
+const subscribe = () => {
+  let topic;
+  for (topic in kafkaConsumer.topicsHandlers) {
+    const handler = utils.specialHandlers[topic] ? utils.specialHandlers[topic] :
+      utils.defaultHandler;
+    kafkaConsumer.topicsHandlers.topic(handler);
+  }
+};
 
 // As of now, for each topic, we are going to use the same handler, this might change in the future
 // For each topic, start a subscription, that upon recieving
 // a message executes the default handler method
-let topic;
-for (topic in kafkaConsumer.topicsHandlers) {
-  const handler = utils.specialHandlers[topic] ? specialHandlers[topic] : defaultHandler;
-  kafkaConsumer.topicsHandlers.topic(handler);
+try {
+  subscribe();
+} catch (err) {
+  logger.error(`Consumer could not subscribe to topic ${topic}, error: ${err}`);
 }

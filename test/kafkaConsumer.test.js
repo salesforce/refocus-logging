@@ -6,11 +6,11 @@ jest.mock('no-kafka');
 
 describe('src/tests/consumer.js', () => {
   it('TopicHandlers gives you an object with mapping from topicName -> function', () => {
-    expect(kafkaConsumer.topicsHandler.test).toBeInstanceOf(Function);
     expect(kafkaConsumer.topicsHandler.foo).toBeInstanceOf(Function);
+    expect(kafkaConsumer.topicsHandler.bar).toBeInstanceOf(Function);
   });
 
-  kafkaConsumer.topicsHandler.test(utils.defaultHandler);
+  kafkaConsumer.topicsHandler.foo(utils.defaultHandler);
   it('Creates the consumer with the right arguments', () => {
     const simpleConsumerMock = jest.spyOn(kafka, 'SimpleConsumer');
     expect(simpleConsumerMock).toHaveBeenCalledWith({

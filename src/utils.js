@@ -11,6 +11,7 @@ const defaultHandler = (messageSet, topic, partition) => {
 
 // Populate this as required
 const specialHandlers = {
+  foo: () => {},
 };
 
 const getConfig = (env) => ({

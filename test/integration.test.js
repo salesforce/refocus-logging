@@ -23,7 +23,7 @@ const sendPing = (key, value, topic) => producer.send({
     key,
     value: JSON.stringify(value),
   },
-}).then((res) => logger.debug('kafkaProducer|Sent|%o', res));
+}).then((res) => debug('kafkaProducer|Sent|%o', res));
 
 describe('src/tests/consumer.js', () => {
   it('Should receive a message from producer', () => {
@@ -33,7 +33,7 @@ describe('src/tests/consumer.js', () => {
       messageSet.forEach((m) => {
         const key = m.message.key.toString();
         const value = JSON.parse(m.message.value.toString());
-        expect(topic).toEqual(utils.testTopic);
+        expect(topic).toEqual(testTopic);
         expect(key).toEqual('key');
         expect(value).toEqual('value');
       });
