@@ -6,15 +6,7 @@ const debug = require('debug')('refocus-logging');
 const clientId = 'consumer-' + process.pid;
 
 // make a mock out of this instance and expect it to be called it with passed in requirements
-const config = utils.getConfig(process.env.isHeroku ? process.env : {
-  TOPICS: 'foo,bar',
-  KAFKA_CLIENT_CERT: 'test-cert',
-  KAFKA_CLIENT_CERT_KEY: 'test-key',
-  KAFKA_URL: 'test-url',
-  KAFKA_CONSUMER_MAX_WAIT_TIME_MS: 100,
-  KAFKA_CONSUMER_MAX_BYTES: (1024 * 1024),
-  KAFKA_CONSUMER_IDLE_TIMEOUT: 1000,
-});
+const config = utils.getConfig();
 debug('The config is', config);
 
 try {
