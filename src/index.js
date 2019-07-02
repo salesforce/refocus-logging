@@ -9,7 +9,7 @@ const debug = require('debug')('refocus-logging');
 const kafkaConsumer = require('./kafkaConsumer');
 const utils = require('./utils');
 const logger = require('pino')();
-
+console.log(process.env)
 debug(`Starting client ${clientId} consumer-${process.pid}`);
 
 let topic;
