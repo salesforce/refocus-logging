@@ -29,7 +29,7 @@ describe('src/tests/consumer.js', () => {
   it('Should receive a message from producer', async () => {
     const testTopic = config.topics[0];
     await sendPing('key', 'value', testTopic);
-    const testHandler = async (messageSet, topic, partition) => {
+    const testHandler = (messageSet, topic, partition) => {
       messageSet.forEach((m) => {
         const key = m.message.key.toString();
         const value = JSON.parse(m.message.value.toString());
