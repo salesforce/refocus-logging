@@ -28,6 +28,6 @@ describe('src/tests/consumer.js', () => {
   it('Should receive a message from producer', async () => {
     const testTopic = config.topics[0];
     await sendPing('key', 'value', testTopic);
-    await kafkaConsumer.initConsumer();
+    kafkaConsumer.initConsumer();
   });
 });
