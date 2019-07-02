@@ -4,10 +4,10 @@
   "description": "Common logging service for Refocus and its associated services.",
   "main": "src/index.js",
   "scripts": {
-    "test": "jest test/unit",
-    "integration": "NODE_ENV=development jest test/integration/",
+    "integration": "jest test/integration/",
+    "lint": "./node_modules/jscs/bin/jscs src test",
     "start": "node src/.",
-    "lint": "./node_modules/jscs/bin/jscs src test"
+    "test": "npm run lint && jest test/unit"
   },
   "repository": {
     "type": "git",
