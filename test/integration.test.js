@@ -23,7 +23,7 @@ const sendPing = async (key, value, topic) => producer.send({
     key,
     value: JSON.stringify(value),
   },
-}).then((res) => debug('kafkaProducer|Sent|%o', res));
+});
 
 describe('src/tests/consumer.js', () => {
   it('Should receive a message from producer', async () => {
