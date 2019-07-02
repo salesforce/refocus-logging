@@ -1,7 +1,7 @@
 const KafkaProducer = require('no-kafka');
-const kafkaConsumer = require('../src/kafkaConsumer');
+const kafkaConsumer = require('../../src/kafkaConsumer');
 const logger = require('pino')();
-const utils = require('../src/utils');
+const utils = require('../../src/utils');
 
 const config = utils.getConfig(process.env);
 

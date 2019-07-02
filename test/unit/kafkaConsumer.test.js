@@ -1,6 +1,6 @@
 const KafkaProducer = require('no-kafka');
-const utils = require('../src/utils');
-const kafkaConsumer = require('../src/kafkaConsumer');
+const utils = require('../../src/utils');
+const kafkaConsumer = require('../../src/kafkaConsumer');
 const kafka = require('no-kafka');
 jest.mock('no-kafka');
 
