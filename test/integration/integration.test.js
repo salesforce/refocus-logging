@@ -1,9 +1,8 @@
 const KafkaProducer = require('no-kafka');
 const kafkaConsumer = require('../../src/kafkaConsumer');
 const logger = require('pino')();
-const utils = require('../../src/utils');
-
-const config = utils.getConfig(process.env);
+const handler = require('../../src/handler');
+const config = require('../../src/config.env')();
 
 // Heroku
 const producer = new KafkaProducer.Producer({
@@ -39,6 +38,6 @@ describe('src/tests/consumer.js', () => {
       });
     };
 
-    await kafkaConsumer.topicHandlers[testTopic](testHandler);
+    await kafkaConsumer.initConsumer();
   });
 });

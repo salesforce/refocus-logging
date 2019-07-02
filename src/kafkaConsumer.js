@@ -1,15 +1,16 @@
 const Kafka = require('no-kafka');
 const logger = require('pino')();
-const utils = require('./utils');
+const handler = require('./handler');
 const debug = require('debug')('refocus-logging');
+const config = require('./config.env')();
 
 const clientId = 'consumer-' + process.pid;
 
 // make a mock out of this instance and expect it to be called it with passed in requirements
-const config = utils.getConfig();
 debug('The config is', config);
 
-try {
+let topicHandlers;
+const initConsumer = () => {
   const consumer = new Kafka.SimpleConsumer({
     clientId,
     connectionString: config.connectionString,
@@ -29,14 +30,25 @@ try {
 
   // Construct an object that has a list of all topics as
   // keys and accordingly you can give it a handler
-  const topicHandlers = config.topics.reduce((obj, topic) => {
-    obj[topic] = (handler) => consumer.subscribe(topic, handler);
+  topicHandlers = config.topics.reduce((obj, topic) => {
+    obj[topic] = (handler) => {
+      try {
+        consumer.subscribe(topic, handler);
+      } catch (err) {
+        logger.error(`Unable to subscribe to topic ${topic}, error ${err}`);
+      }
+    };
+
     return obj;
   }, {});
+  let topic;
+  for (topic in topicHandlers) {
+    topicHandlers[topic](handler(topic));
+  }
 
-  module.exports = {
-    topicHandlers,
-  };
-} catch (err) {
-  logger.error(`Could not start consumer with client ID: ${clientId}, error: ${err}`);
-}
+  return topicHandlers;
+};
+
+module.exports = {
+  initConsumer,
+};
