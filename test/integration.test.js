@@ -28,8 +28,8 @@ const sendPing = async (key, value, topic) => producer.send({
 describe('src/tests/consumer.js', () => {
   it('Should receive a message from producer', async () => {
     const testTopic = config.topics[0];
-    await sendPing('key', 'value', testTopic).then();
-    const testHandler = (messageSet, topic, partition) => {
+    await sendPing('key', 'value', testTopic);
+    const testHandler = async (messageSet, topic, partition) => {
       messageSet.forEach((m) => {
         const key = m.message.key.toString();
         const value = JSON.parse(m.message.value.toString());
@@ -39,6 +39,6 @@ describe('src/tests/consumer.js', () => {
       });
     };
 
-    kafkaConsumer.topicsHandler[testTopic](testHandler);
+    await kafkaConsumer.topicsHandler[testTopic](testHandler);
   });
 });
