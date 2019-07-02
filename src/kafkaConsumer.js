@@ -29,13 +29,13 @@ try {
 
   // Construct an object that has a list of all topics as
   // keys and accordingly you can give it a handler
-  const topicsHandler = config.topics.reduce((obj, topic) => {
+  const topicHandlers = config.topics.reduce((obj, topic) => {
     obj[topic] = (handler) => consumer.subscribe(topic, handler);
     return obj;
   }, {});
 
   module.exports = {
-    topicsHandler,
+    topicHandlers,
   };
 } catch (err) {
   logger.error(`Could not start consumer with client ID: ${clientId}, error: ${err}`);

@@ -39,6 +39,6 @@ describe('src/tests/consumer.js', () => {
       });
     };
 
-    await kafkaConsumer.topicsHandler[testTopic](testHandler);
+    await kafkaConsumer.topicHandlers[testTopic](testHandler);
   });
 });

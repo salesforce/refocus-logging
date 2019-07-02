@@ -10,14 +10,14 @@ const kafkaConsumer = require('./kafkaConsumer');
 const utils = require('./utils');
 const logger = require('pino')();
 
-debug(`Starting client ${clientId} consumer-${process.pid}`);
+debug(`Starting client consumer-${process.pid}`);
 
 let topic;
 const subscribe = () => {
-  for (topic in kafkaConsumer.topicsHandlers) {
+  for (topic in kafkaConsumer.topicHandlers) {
     const handler = utils.specialHandlers[topic] ? utils.specialHandlers[topic] :
       utils.defaultHandler;
-    kafkaConsumer.topicsHandlers.topic(handler);
+    kafkaConsumer.topicHandlers.topic(handler);
   }
 };
 

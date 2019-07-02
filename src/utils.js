@@ -34,7 +34,7 @@ const getConfigHelper = (env) => ({
 });
 
 const getConfig = () => {
-  if (process.env.IS_HEROKU) {
+  if (process.env.HEROKU_TEST_RUN_ID || process.env.NODE_ENV === 'production') {
     return getConfigHelper(process.env);
   }
 
