@@ -16,7 +16,7 @@ const producer = new KafkaProducer.Producer({
 
 producer.init();
 
-const sendPing = (key, value, topic) => producer.send({
+const sendPing = async (key, value, topic) => producer.send({
   topic,
   partition: 0,
   message: {
@@ -26,9 +26,9 @@ const sendPing = (key, value, topic) => producer.send({
 }).then((res) => debug('kafkaProducer|Sent|%o', res));
 
 describe('src/tests/consumer.js', () => {
-  it('Should receive a message from producer', () => {
+  it('Should receive a message from producer', async () => {
     const testTopic = config.topics[0];
-    sendPing('key', 'value', testTopic);
+    await sendPing('key', 'value', testTopic).then();
     const testHandler = (messageSet, topic, partition) => {
       messageSet.forEach((m) => {
         const key = m.message.key.toString();
@@ -39,6 +39,6 @@ describe('src/tests/consumer.js', () => {
       });
     };
 
-    kafkaConsumer.topicsHandlers.testTopic(testHandler);
+    kafkaConsumer.topicsHandler[testTopic](testHandler);
   });
 });
