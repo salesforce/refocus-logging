@@ -10,7 +10,7 @@ const herokuConfig = {
   idleTimeout: process.env.KAFKA_CONSUMER_IDLE_TIMEOUT || 1000,
 };
 
-const integration = {
+const integrationConfig = {
   topics: ['integration'],
   sslCert: process.env.KAFKA_CLIENT_CERT || '.ssl/client.crt',
   sslKey: process.env.KAFKA_CLIENT_CERT_KEY || '.ssl/client.key',
@@ -32,7 +32,7 @@ const devConfig = {
 
 const config = {
   development: devConfig,
-  integration: herokuConfig,
+  integration: integrationConfig,
   production: herokuConfig,
   staging: herokuConfig,
 };
