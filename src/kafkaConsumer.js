@@ -8,6 +8,7 @@ const clientId = 'consumer-' + process.pid;
 // make a mock out of this instance and expect it to be called it with passed in requirements
 const config = utils.getConfig();
 debug('The config is', config);
+console.log(process.env)
 
 try {
   const consumer = new Kafka.SimpleConsumer({
