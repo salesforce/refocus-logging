@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/salesforce/refocus-logging.git"
   },
-  "author": "",
+  "author": "Salesforce Refocus",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/salesforce/refocus-logging/issues"

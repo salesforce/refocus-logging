@@ -17,6 +17,14 @@ const defaultHandler = (messageSet, topic, partition) => {
   }
 */
 const specialHandlers = {
+  integration: (messageSet, topic, partition) => {
+    messageSet.forEach((m) => {
+      const key = m.message.key.toString();
+      const value = JSON.parse(m.message.value.toString());
+      expect(key).toEqual('key');
+      expect(value).toEqual('value');
+    });
+  },
 };
 
 module.exports = (topic) => specialHandlers[topic] ? specialHandlers[topic] : defaultHandler;
