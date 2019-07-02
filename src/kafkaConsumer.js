@@ -23,8 +23,7 @@ const initConsumer = () => {
     idleTimeout: config.idleTimeout,
   });
 
-  debug(`Kafka consumer ${clientId} has been started`);
-  debug('Kafka Consumer %s %o', clientId, consumer);
+  debug(`Kafka consumer ${clientId} has been started as ${consumer}`);
 
   consumer.init();
 
@@ -35,7 +34,9 @@ const initConsumer = () => {
       try {
         consumer.subscribe(topic, handler);
       } catch (err) {
-        logger.error(`Unable to subscribe to topic ${topic}, error ${err}`);
+        // TODO: Not use console.error and still make it testable as of now testing
+        // calls to pino seems untestable
+        console.error(`Unable to subscribe to topic ${topic}, error ${err}`);
       }
     };
 
@@ -46,7 +47,7 @@ const initConsumer = () => {
     topicHandlers[topic](handler(topic));
   }
 
-  return topicHandlers;
+  return topicHandlers; // for testing
 };
 
 module.exports = {
