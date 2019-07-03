@@ -1,25 +1,32 @@
+/**
+ * Copyright (c) 2019, salesforce.com, inc.
+ * All rights reserved.
+ * Licensed under the BSD 3-Clause license.
+ * For full license text, see LICENSE.txt file in the repo root or
+ * https://opensource.org/licenses/BSD-3-Clause
+ */
 
-const getMaxWaitTime = () => {
-  const maxWait = +process.env.KAFKA_CONSUMER_MAX_WAIT_TIME_MS;
-  if (maxWait === 0 || maxWait === NaN) {
+const getMaxWaitTime = (input) => {
+  const maxWait = +input;
+  if (maxWait === NaN || maxWait <= 0) {
     return 100;
   }
 
   return maxWait;
 };
 
-const getMaxBytes = () => {
-  const maxBytes = +process.env.KAFKA_CONSUMER_MAX_BYTES;
-  if (maxBytes === 0 || maxBytes === NaN) {
+const getMaxBytes = (input) => {
+  const maxBytes = +input;
+  if (maxBytes === NaN || maxBytes <= 0) {
     return 1024 * 1024;
   }
 
   return maxBytes;
 };
 
-const getIdleTimeout = () => {
-  const idleTimeout = +process.env.KAFKA_CONSUMER_IDLE_TIMEOUT;
-  if (idleTimeout === 0 || idleTimeout === NaN) {
+const getIdleTimeout = (input) => {
+  const idleTimeout = +input;
+  if (idleTimeout === NaN || idleTimeout <= 0) {
     return 1000;
   }
 
@@ -27,13 +34,13 @@ const getIdleTimeout = () => {
 };
 
 const herokuConfig = {
-  topics: process.env.TOPICS ? process.env.TOPICS.split(',').map((string) => string.trim()) : [''],
+  topics: process.env.TOPICS ? process.env.TOPICS.split(',').map((string) => string.trim()) : [],
   sslCert: process.env.KAFKA_CLIENT_CERT || '.ssl/client.crt',
   sslKey: process.env.KAFKA_CLIENT_CERT_KEY || '.ssl/client.key',
   connectionString: process.env.KAFKA_URL ? process.env.KAFKA_URL.replace(/\+ssl/g, '') : '',
-  maxWaitTime: getMaxWaitTime(),
-  maxBytes: getMaxBytes(),
-  idleTimeout: getIdleTimeout(),
+  maxWaitTime: getMaxWaitTime(process.env.KAFKA_CONSUMER_MAX_WAIT_TIME_MS),
+  maxBytes: getMaxBytes(process.env.KAFKA_CONSUMER_MAX_BYTES),
+  idleTimeout: getIdleTimeout(process.env.KAFKA_CONSUMER_IDLE_TIMEOUT),
 };
 
 const devConfig = {
@@ -55,5 +62,18 @@ const config = {
 
 module.exports = (environmentName) => {
   if (!environmentName) environmentName = process.env.NODE_ENV;
-  return config[environmentName] ? config[env] : config.development;
+  return config[environmentName] ? config[environmentName] : config.development;
+};
+
+module.exports = {
+  getConfig: (environmentName) => {
+    if (!environmentName) environmentName = process.env.NODE_ENV;
+    return config[environmentName] ? config[environmentName] : config.development;
+  },
+
+  testExport: {
+    getMaxWaitTime,
+    getMaxBytes,
+    getIdleTimeout,
+  },
 };

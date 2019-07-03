@@ -1,8 +1,15 @@
+/**
+ * Copyright (c) 2019, salesforce.com, inc.
+ * All rights reserved.
+ * Licensed under the BSD 3-Clause license.
+ * For full license text, see LICENSE.txt file in the repo root or
+ * https://opensource.org/licenses/BSD-3-Clause
+ */
+
 const Kafka = require('no-kafka');
-const logger = require('pino')();
 const handler = require('./handler');
 const debug = require('debug')('refocus-logging');
-const config = require('./config.env')();
+const config = require('./config.env').getConfig();
 
 const clientId = 'consumer-' + process.pid;
 
