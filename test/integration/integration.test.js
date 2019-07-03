@@ -1,7 +1,5 @@
 const KafkaProducer = require('no-kafka');
 const kafkaConsumer = require('../../src/kafkaConsumer');
-const logger = require('pino')();
-const handler = require('../../src/handler');
 const config = require('../../src/config.env')();
 
 // Heroku
