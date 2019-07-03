@@ -7,7 +7,7 @@
     "integration": "NODE_ENV=integration jest test/integration/",
     "lint": "./node_modules/jscs/bin/jscs src test",
     "start": "node src/.",
-    "test": "NODE_ENV=development npm run lint && jest test/unit"
+    "test": "NODE_ENV=development npm run lint && jest test/unit --coverage --coverageDirectory=output/coverage/jest"
   },
   "repository": {
     "type": "git",
@@ -27,5 +27,11 @@
   "devDependencies": {
     "jest": "^24.8.0",
     "jscs": "^3.0.7"
+  },
+  "jest": {
+    "coverageReporters": [
+      "text",
+      "html"
+    ]
   }
 }

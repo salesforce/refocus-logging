@@ -6,13 +6,18 @@
  * https://opensource.org/licenses/BSD-3-Clause
  */
 
+const logger = require('pino')();
+
 // The default handler just logs out the message
 const defaultHandler = (messageSet, topic, partition) => {
+  let messageSetOutput = '';
   messageSet.forEach((m) => {
     const key = m.message.key;
     const value = m.message.value;
     logger.info('Message from topic', topic, key, value);
+    messageSetOutput += 'Message from topic ' + topic + ' ' + key + ' ' + value;
   });
+  return messageSetOutput;
 };
 
 /*

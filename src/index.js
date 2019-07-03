@@ -8,7 +8,6 @@
 
 const debug = require('debug')('refocus-logging');
 const consumer = require('./kafkaConsumer');
-const logger = require('pino')();
 
 debug(`Starting client consumer-${process.pid}`);
 
