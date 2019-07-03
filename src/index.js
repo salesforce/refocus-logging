@@ -17,5 +17,5 @@ debug(`Starting client consumer-${process.pid}`);
 try {
   initConsumer();
 } catch (err) {
-  logger.error(`Consumer could not subscribe to topic error: ${err}`);
+  logger.error(`Consumer could not be initialized ${err}`);
 }
