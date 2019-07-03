@@ -3,7 +3,7 @@ const kafkaConsumer = require('../../src/kafkaConsumer');
 const kafka = require('no-kafka');
 jest.mock('no-kafka');
 
-describe('src/tests/consumer.js', () => {
+describe('test/unit/consumer.js', () => {
   it('TopicHandlers gives you an object with mapping from topicName and throws no error', () => {
     const simpleConsumerMock = jest.spyOn(kafka, 'SimpleConsumer');
     const topicHandlers = kafkaConsumer.initConsumer();

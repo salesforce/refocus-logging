@@ -24,7 +24,7 @@ const sendPing = async (key, value, topic) => producer.send({
   },
 });
 
-describe('src/tests/consumer.js', () => {
+describe('test/integrtion/integration.test.js', () => {
   it('Should receive a message from producer', async () => {
     const testTopic = config.topics[0];
     await sendPing('key', 'value', testTopic);
