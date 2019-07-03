@@ -1,13 +1,39 @@
-console.warn(process.env.NODE_ENV);
+
+const getMaxWaitTime = () => {
+  const maxWait = +process.env.KAFKA_CONSUMER_MAX_WAIT_TIME_MS;
+  if (maxWait === 0 || maxWait === NaN) {
+    return 100;
+  }
+
+  return maxWait;
+};
+
+const getMaxBytes = () => {
+  const maxBytes = +process.env.KAFKA_CONSUMER_MAX_BYTES;
+  if (maxBytes === 0 || maxBytes === NaN) {
+    return 1024 * 1024;
+  }
+
+  return maxBytes;
+};
+
+const getIdleTimeout = () => {
+  const idleTimeout = +process.env.KAFKA_CONSUMER_IDLE_TIMEOUT;
+  if (idleTimeout === 0 || idleTimeout === NaN) {
+    return 1000;
+  }
+
+  return idleTimeout;
+};
 
 const herokuConfig = {
-  topics: process.env.TOPICS ? process.env.TOPICS.split(',').map((string) => string.trim()) : '',
+  topics: process.env.TOPICS ? process.env.TOPICS.split(',').map((string) => string.trim()) : [''],
   sslCert: process.env.KAFKA_CLIENT_CERT || '.ssl/client.crt',
   sslKey: process.env.KAFKA_CLIENT_CERT_KEY || '.ssl/client.key',
   connectionString: process.env.KAFKA_URL ? process.env.KAFKA_URL.replace(/\+ssl/g, '') : '',
-  maxWaitTime: process.env.KAFKA_CONSUMER_MAX_WAIT_TIME_MS || 100,
-  maxBytes: process.env.KAFKA_CONSUMER_MAX_BYTES || (1024 * 1024),
-  idleTimeout: process.env.KAFKA_CONSUMER_IDLE_TIMEOUT || 1000,
+  maxWaitTime: getMaxWaitTime(),
+  maxBytes: getMaxBytes(),
+  idleTimeout: getIdleTimeout(),
 };
 
 const integrationConfig = {
@@ -15,9 +41,9 @@ const integrationConfig = {
   sslCert: process.env.KAFKA_CLIENT_CERT || '.ssl/client.crt',
   sslKey: process.env.KAFKA_CLIENT_CERT_KEY || '.ssl/client.key',
   connectionString: process.env.KAFKA_URL ? process.env.KAFKA_URL.replace(/\+ssl/g, '') : '',
-  maxWaitTime: process.env.KAFKA_CONSUMER_MAX_WAIT_TIME_MS || 100,
-  maxBytes: process.env.KAFKA_CONSUMER_MAX_BYTES || (1024 * 1024),
-  idleTimeout: process.env.KAFKA_CONSUMER_IDLE_TIMEOUT || 1000,
+  maxWaitTime: getMaxWaitTime(),
+  maxBytes: getMaxBytes(),
+  idleTimeout: getIdleTimeout(),
 };
 
 const devConfig = {
@@ -37,5 +63,7 @@ const config = {
   staging: herokuConfig,
 };
 
-module.exports = () => config[process.env.NODE_ENV] ?
-  config[process.env.NODE_ENV] : config.development;
+module.exports = (environmentName) => {
+  if (!environmentName) environmentName = process.env.NODE_ENV;
+  return config[environmentName] ? config[env] : config.development;
+};

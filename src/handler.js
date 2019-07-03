@@ -1,30 +1,3 @@
-const logger = require('pino')();
-
-// The default handler just logs out the message
-const defaultHandler = (messageSet, topic, partition) => {
-  messageSet.forEach((m) => {
-    const key = m.message.key.toString();
-    const value = JSON.parse(m.message.value.toString());
-    logger.info('Message from topic', topic, key, value);
-  });
-};
-
-/*
-  Populate this as required
-  FORMAT:
-  {
-    topic: () => {handler function},
-  }
-*/
-const specialHandlers = {
-  integration: (messageSet, topic, partition) => {
-    messageSet.forEach((m) => {
-      const key = m.message.key.toString();
-      const value = JSON.parse(m.message.value.toString());
-      expect(key).toEqual('key');
-      expect(value).toEqual('value');
-    });
-  },
-};
-
-module.exports = (topic) => specialHandlers[topic] ? specialHandlers[topic] : defaultHandler;
+const handlerUtil = require('./handlerUtil');
+module.exports = (topic) => handlerUtil.specialHandlers()[topic] ?
+    handlerUtil.specialHandlers()[topic] : handlerUtil.defaultHandler;

@@ -6,7 +6,7 @@
  * https://opensource.org/licenses/BSD-3-Clause
  */
 const debug = require('debug')('refocus-logging');
-const initConsumer = require('./kafkaConsumer');
+const consumer = require('./kafkaConsumer');
 const logger = require('pino')();
 
 debug(`Starting client consumer-${process.pid}`);
@@ -15,7 +15,7 @@ debug(`Starting client consumer-${process.pid}`);
 // For each topic, start a subscription, that upon recieving
 // a message executes the default handler method
 try {
-  initConsumer();
+  consumer.initConsumer();
 } catch (err) {
   logger.error(`Consumer could not be initialized ${err}`);
 }
