@@ -36,16 +36,6 @@ const herokuConfig = {
   idleTimeout: getIdleTimeout(),
 };
 
-const integrationConfig = {
-  topics: ['integration'],
-  sslCert: process.env.KAFKA_CLIENT_CERT || '.ssl/client.crt',
-  sslKey: process.env.KAFKA_CLIENT_CERT_KEY || '.ssl/client.key',
-  connectionString: process.env.KAFKA_URL ? process.env.KAFKA_URL.replace(/\+ssl/g, '') : '',
-  maxWaitTime: getMaxWaitTime(),
-  maxBytes: getMaxBytes(),
-  idleTimeout: getIdleTimeout(),
-};
-
 const devConfig = {
   topics: ['foo', 'bar'],
   sslCert: 'test-cert',
@@ -58,7 +48,7 @@ const devConfig = {
 
 const config = {
   development: devConfig,
-  integration: integrationConfig,
+  integration: herokuConfig,
   production: herokuConfig,
   staging: herokuConfig,
 };
