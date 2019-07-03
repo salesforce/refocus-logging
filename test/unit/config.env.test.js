@@ -6,23 +6,49 @@
  * https://opensource.org/licenses/BSD-3-Clause
  */
 
-const configTest = require('../../src/config.env').testExport;
+const config = require('../../src/config.env');
+const getConfig = config.getConfig;
+const { getMaxWaitTime, getMaxBytes, getIdleTimeout, herokuConfig, devConfig } = config.testExport;
 
-describe('test/unit/config.env.js', () => {
-  it('Returns 100 for null, undefined, 0, negative and string values', () => {
-    const resultNull = configTest.getMaxWaitTime(null);
-    const resultUndefined = configTest.getMaxWaitTime(undefined);
-    const resultZero = configTest.getMaxWaitTime(0);
-    const resultNegative = configTest.getMaxWaitTime(-1);
-    const resultString = configTest.getMaxWaitTime('foo');
-    expect(resultNull).toBe(100);
-    expect(resultNegative).toBe(100);
-    expect(resultUndefined).toBe(100);
-    expect(resultZero).toBe(100);
-    expect(resultString).toBe(100);
+describe('test/unit/config.env.js helpers', () => {
+  it('Returns deafult values for null, undefined, 0, negative and string values', () => {
+    expect(getMaxWaitTime(null)).toBe(100);
+    expect(getMaxWaitTime(undefined)).toBe(100);
+    expect(getMaxWaitTime(0)).toBe(100);
+    expect(getMaxWaitTime(-1)).toBe(100);
+    expect(getMaxWaitTime('foo')).toBe(100);
+
+    expect(getMaxBytes(null)).toBe(1048576);
+    expect(getMaxBytes(undefined)).toBe(1048576);
+    expect(getMaxBytes(0)).toBe(1048576);
+    expect(getMaxBytes(-1)).toBe(1048576);
+    expect(getMaxBytes('foo')).toBe(1048576);
+
+    expect(getIdleTimeout(null)).toBe(1000);
+    expect(getIdleTimeout(undefined)).toBe(1000);
+    expect(getIdleTimeout(0)).toBe(1000);
+    expect(getIdleTimeout(-1)).toBe(1000);
+    expect(getIdleTimeout('foo')).toBe(1000);
   });
 
-  it('Does not call the special handler and call the default handler', () => {
+  it('Returns the value passed for positive number', () => {
+    expect(getIdleTimeout('20')).toBe(20);
+    expect(getMaxWaitTime('30')).toBe(30);
+    expect(getIdleTimeout('40')).toBe(40);
+  });
+});
 
+describe('test/unit/config.env.js getConfig', () => {
+  it('takes environment name if not passed and returns the respective config', () => {
+    process.env.NODE_ENV = 'development';
+    const resultConfig = getConfig();
+    expect(resultConfig).toEqual(devConfig);
+  });
+
+  it('Overrides env variables if given and returns the respective config', () => {
+    expect(getConfig('development')).toEqual(devConfig);
+    expect(getConfig('production')).toEqual(herokuConfig);
+    expect(getConfig('integration')).toEqual(herokuConfig);
+    expect(getConfig('staging')).toEqual(herokuConfig);
   });
 });

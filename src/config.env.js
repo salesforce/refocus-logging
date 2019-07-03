@@ -8,7 +8,7 @@
 
 const getMaxWaitTime = (input) => {
   const maxWait = +input;
-  if (maxWait === NaN || maxWait <= 0) {
+  if (isNaN(maxWait) || maxWait <= 0) {
     return 100;
   }
 
@@ -17,7 +17,7 @@ const getMaxWaitTime = (input) => {
 
 const getMaxBytes = (input) => {
   const maxBytes = +input;
-  if (maxBytes === NaN || maxBytes <= 0) {
+  if (isNaN(maxBytes) || maxBytes <= 0) {
     return 1024 * 1024;
   }
 
@@ -26,7 +26,7 @@ const getMaxBytes = (input) => {
 
 const getIdleTimeout = (input) => {
   const idleTimeout = +input;
-  if (idleTimeout === NaN || idleTimeout <= 0) {
+  if (isNaN(idleTimeout) || idleTimeout <= 0) {
     return 1000;
   }
 
@@ -75,5 +75,7 @@ module.exports = {
     getMaxWaitTime,
     getMaxBytes,
     getIdleTimeout,
+    herokuConfig,
+    devConfig,
   },
 };
