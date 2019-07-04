@@ -60,11 +60,6 @@ const config = {
   staging: herokuConfig,
 };
 
-module.exports = (environmentName) => {
-  if (!environmentName) environmentName = process.env.NODE_ENV;
-  return config[environmentName] ? config[environmentName] : config.development;
-};
-
 module.exports = {
   getConfig: (environmentName) => {
     if (!environmentName) environmentName = process.env.NODE_ENV;

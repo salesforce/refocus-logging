@@ -34,7 +34,7 @@ describe('test/unit/config.env.js helpers', () => {
   it('Returns the value passed for positive number', () => {
     expect(getIdleTimeout('20')).toBe(20);
     expect(getMaxWaitTime('30')).toBe(30);
-    expect(getIdleTimeout('40')).toBe(40);
+    expect(getMaxBytes('40')).toBe(40);
   });
 });
 
