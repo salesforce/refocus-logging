@@ -30,7 +30,8 @@ const sendPing = async (key, value, topic) => producer.send({
   },
 });
 
-// TODO: Write this
+// TODO: Once we can enable setup Kafka on Heroku CI we would want to write
+// this integration test. As of now, there is no documentation on how to do that
 describe('test/integrtion/integration.test.js', () => {
   it('Should receive a message from producer', async () => {
     // const testTopic = config.topics[0];

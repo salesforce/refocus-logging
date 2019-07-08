@@ -11,7 +11,7 @@ const getConfig = config.getConfig;
 const { getMaxWaitTime, getMaxBytes, getIdleTimeout, herokuConfig, devConfig } = config.testExport;
 
 describe('test/unit/config.env.js helpers', () => {
-  it('Returns deafult values for null, undefined, 0, negative and string values', () => {
+  it('Returns default values for null, undefined, 0, negative and string values', () => {
     expect(getMaxWaitTime(null)).toBe(100);
     expect(getMaxWaitTime(undefined)).toBe(100);
     expect(getMaxWaitTime(0)).toBe(100);
