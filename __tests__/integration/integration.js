@@ -8,7 +8,7 @@
 
 const KafkaProducer = require('no-kafka');
 const kafkaConsumer = require('../../src/kafkaConsumer');
-const config = require('../../src/config.env')();
+const config = require('../../src/config')();
 
 // Heroku
 const producer = new KafkaProducer.Producer({

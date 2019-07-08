@@ -13,7 +13,7 @@
 const Kafka = require('no-kafka');
 const handler = require('./handler');
 const debug = require('debug')('refocus-logging');
-const config = require('./config.env').getConfig();
+const config = require('./config').getConfig();
 
 const clientId = 'consumer-' + process.pid;
 
