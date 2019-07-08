@@ -5,6 +5,10 @@
  * For full license text, see LICENSE.txt file in the repo root or
  * https://opensource.org/licenses/BSD-3-Clause
  */
+/**
+ * src/config.env.js
+ * define config variables
+ */
 
 const getMaxWaitTime = (input) => {
   const maxWait = +input;

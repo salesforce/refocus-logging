@@ -5,7 +5,11 @@
  * For full license text, see LICENSE.txt file in the repo root or
  * https://opensource.org/licenses/BSD-3-Clause
  */
-
+/**
+ * src/kafkaConsumer.js
+ * Define consumer logic for the Kafka
+ * This starts up a consumer and subscribes to all topics
+ */
 const Kafka = require('no-kafka');
 const handler = require('./handler');
 const debug = require('debug')('refocus-logging');

@@ -5,6 +5,10 @@
  * For full license text, see LICENSE.txt file in the repo root or
  * https://opensource.org/licenses/BSD-3-Clause
  */
+/**
+ * src/handler.js
+ * Provide what handler to use
+ */
 
 // This needs to stay in different file since we wanted to mock
 // specialHandlers and defaultHandler but not the method that is being

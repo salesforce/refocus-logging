@@ -5,6 +5,10 @@
  * For full license text, see LICENSE.txt file in the repo root or
  * https://opensource.org/licenses/BSD-3-Clause
  */
+/**
+ * src/index.js
+ * intialize the consumer
+ */
 
 const debug = require('debug')('refocus-logging');
 const consumer = require('./kafkaConsumer');
