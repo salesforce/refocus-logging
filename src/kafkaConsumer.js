@@ -14,7 +14,6 @@ const Kafka = require('no-kafka');
 const handler = require('./handler');
 const debug = require('debug')('refocus-logging');
 const config = require('./config').getConfig();
-const logger = require('pino')();
 
 const clientId = 'consumer-' + process.pid;
 
