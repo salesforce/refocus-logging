@@ -17,24 +17,6 @@ describe('test/unit/consumer.js', () => {
     expect(topicHandlers.bar).toBeInstanceOf(Function);
   });
 
-  it('subscribe throws an error', () => {
-    const simpleConsumerMock = jest.spyOn(kafka, 'SimpleConsumer');
-    simpleConsumerMock.mockImplementationOnce(() => ({
-        subscribe: () => {
-          throw new Error();
-        },
-
-        init: () => {
-        },
-      })
-    );
-    let output = '';
-    console.error = jest.fn(inputs => (output += inputs));
-    kafkaConsumer.initConsumer();
-    expect(output).toBe('Unable to subscribe to topic foo, error Error' +
-    'Unable to subscribe to topic bar, error Error');
-  });
-
   it('Creates the consumer with the right arguments', () => {
     const topicHandlers = kafkaConsumer.initConsumer();
     const simpleConsumerMock = jest.spyOn(kafka, 'SimpleConsumer');
@@ -50,4 +32,38 @@ describe('test/unit/consumer.js', () => {
       idleTimeout: 1000,
     });
   });
+
+  it('subscribe throws an error', () => {
+    const simpleConsumerMock = jest.spyOn(kafka, 'SimpleConsumer');
+    simpleConsumerMock.mockImplementationOnce(() => ({
+        subscribe: () => {
+          throw new Error();
+        },
+
+        init: () => {
+        },
+      })
+    );
+    let output = '';
+    const callback = jest.fn();
+    kafkaConsumer.initConsumer(callback);
+    expect(callback).toHaveBeenCalled();
+  });
+
+  it('Init throws an error', () => {
+    const simpleConsumerMock = jest.spyOn(kafka, 'SimpleConsumer');
+    simpleConsumerMock.mockImplementationOnce(() => ({
+        subscribe: () => {
+        },
+
+        init: () => {
+          throw new Error('');
+        },
+      })
+    );
+    const callback = jest.fn();
+    kafkaConsumer.initConsumer(callback);
+    expect(callback).toHaveBeenCalled();
+  });
+
 });

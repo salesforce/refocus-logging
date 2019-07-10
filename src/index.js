@@ -12,11 +12,12 @@
 
 const debug = require('debug')('refocus-logging');
 const consumer = require('./kafkaConsumer');
+const logger = require('pino')();
 
 debug(`Starting client consumer-${process.pid}`);
 
-try {
-  consumer.initConsumer();
-} catch (err) {
-  logger.error(`Consumer could not be initialized ${err}`);
-}
+const errorHandler = (message) => {
+  logger.error(message);
+};
+
+consumer.initConsumer(errorHandler);
