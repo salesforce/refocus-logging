@@ -1,0 +1,37 @@
+{
+  "name": "refocus-logging",
+  "version": "1.0.0",
+  "description": "Common logging service for Refocus and its associated services.",
+  "main": "src/index.js",
+  "scripts": {
+    "integration": "NODE_ENV=integration jest __tests__/integration/",
+    "lint": "./node_modules/jscs/bin/jscs src __tests__",
+    "start": "node src/.",
+    "test": "NODE_ENV=development npm run lint && jest __tests__/unit --coverage --coverageDirectory=output/coverage/jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/salesforce/refocus-logging.git"
+  },
+  "author": "Salesforce Refocus",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/salesforce/refocus-logging/issues"
+  },
+  "homepage": "https://github.com/salesforce/refocus-logging#readme",
+  "dependencies": {
+    "debug": "^4.1.1",
+    "no-kafka": "^3.4.3",
+    "pino": "^5.12.6"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0",
+    "jscs": "^3.0.7"
+  },
+  "jest": {
+    "coverageReporters": [
+      "text",
+      "html"
+    ]
+  }
+}

@@ -1,1 +1,1 @@
-web: DEBUG=$DEBUG npm start
+logger: DEBUG=$DEBUG npm start
