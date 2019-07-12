@@ -12,14 +12,31 @@
 
 const logger = require('pino')();
 
+//error, warn, info
+// debug or trace
+const loggerTypes = {
+  error: logger.error,
+  warn: logger.warn,
+  info: logger.info,
+  debug: logger.debug,
+  logger: logger.trace,
+};
+
 // The default handler just logs out the message
-const defaultHandler = (messageSet, topic, partition) => {
+const defaultHandler = (messageSet, topic, partition, callback) => {
   let messageSetOutput = '';
   messageSet.forEach((m) => {
     const key = m.message.key;
     const value = m.message.value;
-    logger.info('Message from topic', topic, key, value);
-    messageSetOutput += 'Message from topic ' + topic + ' ' + key + ' ' + value;
+
+    // TODO: Discuss different cases and what should be done
+    if (loggerTypes[key]) {
+      logger.info('From application: ', topic, ' Message: ', value);
+      callback('Logging with known key');
+    } else {
+      logger.info('From application: ', topic, ' Message: ', value);
+      callback('Unknown key');
+    }
   });
   return messageSetOutput;
 };

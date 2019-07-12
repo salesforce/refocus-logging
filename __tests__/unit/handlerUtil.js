@@ -13,12 +13,17 @@ describe('test/unit/handler.js', () => {
     expect(specialHandlers()).toEqual({});
   });
 
-  it('Returns the result for message set', () => {
-    const messageSet = [{
-      message: { key: 'key', value: 'value' },
-    },
-  ];
-    expect(defaultHandler(messageSet, 'foo', 0)).toBe('Message from topic foo key value');
+  it('Logs for unknown key', () => {
+    const messageSet = [{ message: { key: 'key', value: 'value' } }];
+    const callback = jest.fn();
+    defaultHandler(messageSet, 'foo', 0, callback);
+    expect(callback).toHaveBeenCalledWith('Unknown key');
+  });
 
+  it('Logs for existing key', () => {
+    const messageSet = [{ message: { key: 'info', value: 'value' } }];
+    const callback = jest.fn();
+    defaultHandler(messageSet, 'foo', 0, callback);
+    expect(callback).toHaveBeenCalledWith('Logging with known key');
   });
 });
