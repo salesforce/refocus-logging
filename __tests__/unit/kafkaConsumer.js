@@ -11,15 +11,16 @@ const kafka = require('no-kafka');
 jest.mock('no-kafka');
 
 describe('test/unit/consumer.js', () => {
-  it('TopicHandlers gives you an object with mapping from topicName and throws no error', () => {
-    const { topicHandlers } = kafkaConsumer.initConsumer();
+  it('TopicHandlers gives you an object with mapping from topicName and throws no error',
+    async () => {
+    const { topicHandlers } = await kafkaConsumer.initConsumer();
     expect(topicHandlers.foo).toBeInstanceOf(Function);
     expect(topicHandlers.bar).toBeInstanceOf(Function);
   });
 
-  it('Creates the consumer with the right arguments', () => {
-    const topicHandlers = kafkaConsumer.initConsumer();
+  it('Creates the consumer with the right arguments', async () => {
     const simpleConsumerMock = jest.spyOn(kafka, 'SimpleConsumer');
+    const topicHandlers = await kafkaConsumer.initConsumer();
     expect(simpleConsumerMock).toHaveBeenCalledWith({
       clientId: `consumer-${process.pid}`,
       connectionString: 'test-url',
@@ -33,7 +34,7 @@ describe('test/unit/consumer.js', () => {
     });
   });
 
-  it('subscribe throws an error', () => {
+  it('subscribe throws an error', async () => {
     const simpleConsumerMock = jest.spyOn(kafka, 'SimpleConsumer');
     simpleConsumerMock.mockImplementationOnce(() => ({
         subscribe: () => {
@@ -46,11 +47,11 @@ describe('test/unit/consumer.js', () => {
     );
     let output = '';
     const callback = jest.fn();
-    kafkaConsumer.initConsumer(callback);
+    await kafkaConsumer.initConsumer(callback);
     expect(callback).toHaveBeenCalled();
   });
 
-  it('Init throws an error', () => {
+  it('Init throws an error', async () => {
     const simpleConsumerMock = jest.spyOn(kafka, 'SimpleConsumer');
     simpleConsumerMock.mockImplementationOnce(() => ({
         subscribe: () => {
@@ -62,7 +63,7 @@ describe('test/unit/consumer.js', () => {
       })
     );
     const callback = jest.fn();
-    kafkaConsumer.initConsumer(callback);
+    await kafkaConsumer.initConsumer(callback);
     expect(callback).toHaveBeenCalled();
   });
 

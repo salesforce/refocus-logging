@@ -20,7 +20,7 @@ const clientId = 'consumer-' + process.pid;
 
 debug('The config is', config);
 
-const initConsumer = (errorCallback) => {
+const initConsumer = async (errorCallback) => {
   try {
     const consumer = new Kafka.SimpleConsumer({
       clientId,
@@ -34,15 +34,15 @@ const initConsumer = (errorCallback) => {
       idleTimeout: config.idleTimeout,
     });
 
-    consumer.init();
+    await consumer.init();
     debug(`Kafka consumer ${clientId} has been started as ${consumer}`);
 
     // Construct an object that has a list of all topics as
     // keys and accordingly you can give it a handler
     const topicHandlers = config.topics.reduce((obj, topic) => {
-      obj[topic] = (handler) => {
+      obj[topic] = async (handler) => {
         try {
-          consumer.subscribe(topic, handler);
+          await consumer.subscribe(topic, handler);
         } catch (err) {
           errorCallback(`Unable to subscribe to topic ${topic}, error ${err}`);
         }
@@ -52,7 +52,7 @@ const initConsumer = (errorCallback) => {
     }, {});
     let topic;
     for (topic in topicHandlers) {
-      topicHandlers[topic](handler(topic));
+      await topicHandlers[topic](handler(topic));
     }
 
     return {
