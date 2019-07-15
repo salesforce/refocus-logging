@@ -24,7 +24,6 @@ const loggerTypes = {
 
 // The default handler just logs out the message
 const defaultHandler = (messageSet, topic, partition, callback = logger.info) => {
-  let messageSetOutput = '';
   messageSet.forEach((m) => {
     const key = m.message.key;
     const value = m.message.value;
@@ -37,7 +36,6 @@ const defaultHandler = (messageSet, topic, partition, callback = logger.info) =>
       logger.info('From application: ', topic, ' Message: ', value, 'Received at: ', new Date());
     }
   });
-  return messageSetOutput;
 };
 
 /*
