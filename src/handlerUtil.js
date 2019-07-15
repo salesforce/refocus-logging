@@ -25,7 +25,7 @@ const loggerTypes = {
 const defaultHandler = (messageSet, topic, partition, callback = logger.info) => {
   messageSet.forEach((m) => {
     const key = m.message.key.toString(); // logging level
-    const value = m.message.value.toString();
+    const value = JSON.parse(m.message.value.toString());
 
     // TODO: Discuss different cases and what should be done
     if (loggerTypes[key]) {
