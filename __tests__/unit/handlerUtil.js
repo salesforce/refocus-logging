@@ -14,14 +14,16 @@ describe('test/unit/handler.js', () => {
   });
 
   it('Logs for unknown key', () => {
-    const messageSet = [{ message: { key: 'key', value: 'value' } }];
+    const value = Buffer.from(JSON.stringify({ value: { foo: 'bar' } }));
+    const messageSet = [{ message: { key: 'key', value } }];
     const callback = jest.fn();
     defaultHandler(messageSet, 'foo', 0, callback);
     expect(callback).toHaveBeenCalledWith('Logging with unknown key');
   });
 
   it('Logs for existing key', () => {
-    const messageSet = [{ message: { key: 'info', value: 'value' } }];
+    const value = Buffer.from(JSON.stringify({ value: { foo: 'bar' } }));
+    const messageSet = [{ message: { key: 'info', value } }];
     const callback = jest.fn();
     defaultHandler(messageSet, 'foo', 0, callback);
     expect(callback).not.toHaveBeenCalled();
