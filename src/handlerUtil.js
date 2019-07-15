@@ -19,7 +19,7 @@ const loggerTypes = {
   warn: logger.warn,
   info: logger.info,
   debug: logger.debug,
-  logger: logger.trace,
+  trace: logger.trace,
 };
 
 // The default handler just logs out the message
