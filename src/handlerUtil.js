@@ -27,7 +27,8 @@ const defaultHandler = (messageSet, topic, partition, callback = logger.info) =>
 
     // TODO: Discuss different cases and what should be done
     if (loggerTypes[key]) {
-      loggerTypes[key]('From application: ', topic, ' Message: ', value, 'Received at: ', new Date());
+      logger.info('From application: ', topic, ' Message: ', value,
+      ' Received at: ', new Date());
     } else {
       callback('Logging with unknown key');
       logger.info('From application: ', topic, ' Message: ', value, 'Received at: ', new Date());
