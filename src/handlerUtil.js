@@ -12,7 +12,7 @@
  */
 const logger = require('pino')();
 
-// We need to use the interal 'this' Pino uses
+// We need to retain the interal 'this' Pino uses
 const loggerTypes = {
   error: logger.error.bind(logger),
   warn: logger.warn.bind(logger),
