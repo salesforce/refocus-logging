@@ -17,7 +17,7 @@ describe('test/unit/handler.js', () => {
     const messageSet = [{ message: { key: 'key', value: 'value' } }];
     const callback = jest.fn();
     defaultHandler(messageSet, 'foo', 0, callback);
-    expect(callback).toHaveBeenCalledWith('Unknown key');
+    expect(callback).toHaveBeenCalledWith('Logging with unknown key');
   });
 
   it('Logs for existing key', () => {
