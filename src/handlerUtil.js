@@ -19,6 +19,8 @@ const loggerTypes = {
   info: logger.info.bind(logger),
   debug: logger.debug.bind(logger),
   trace: logger.trace.bind(logger),
+  verbose: logger.trace.bind(logger),
+  silly: logger.trace.bind(logger),
 };
 
 // The default handler just logs out the message
