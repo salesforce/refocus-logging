@@ -17,8 +17,6 @@ const config = require('./config').getConfig();
 
 const clientId = 'consumer-' + process.pid;
 
-debug('The config is', config);
-
 const initConsumer = async (errorCallback) => {
   try {
     const consumer = new Kafka.SimpleConsumer({
