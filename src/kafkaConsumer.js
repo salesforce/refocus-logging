@@ -34,7 +34,7 @@ const initConsumer = async (errorCallback) => {
     });
 
     await consumer.init();
-    debug(`Kafka consumer ${clientId} has been started as ${consumer}`);
+    debug(`Kafka consumer ${clientId} has been started`);
 
     // Construct an object that has a list of all topics as
     // keys and accordingly you can give it a handler
