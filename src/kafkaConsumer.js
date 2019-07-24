@@ -52,6 +52,7 @@ const initConsumer = async (errorCallback) => {
       maxWaitTime: config.maxWaitTime,
       maxBytes: config.maxBytes,
       idleTimeout: config.idleTimeout,
+      handlerConcurrency: 1,
     });
 
     const strategies = [{
