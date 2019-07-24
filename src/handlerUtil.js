@@ -30,7 +30,7 @@ const defaultHandler = (messageSet, topic, partition, callback = logger.info) =>
     const value = JSON.parse(m.message.value.toString());
     const log = {
       application: topic,
-      sendTimeStamp: value.sendTimeStamp,
+      messageTime: value.messageTime,
       message: value.message,
     };
     if (loggerTypes[key]) {

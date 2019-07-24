@@ -15,7 +15,7 @@ describe('test/unit/handler.js', () => {
 
   it('Logs for unknown key', () => {
     const value = Buffer.from(JSON.stringify({ message: { foo: 'bar' },
-      sendTimeStamp: new Date(), }));
+      messageTime: new Date(), }));
     const messageSet = [{ message: { key: 'key', value } }];
     const callback = jest.fn();
     defaultHandler(messageSet, 'foo', 0, callback);
@@ -24,7 +24,7 @@ describe('test/unit/handler.js', () => {
 
   it('Logs for existing key', () => {
     const value = Buffer.from(JSON.stringify({ message: { foo: 'bar' },
-      sendTimeStamp: new Date(), }));
+      messageTime: new Date(), }));
     const messageSet = [{ message: { key: 'info', value } }];
     const callback = jest.fn();
     defaultHandler(messageSet, 'foo', 0, callback);
