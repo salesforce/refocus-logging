@@ -19,9 +19,9 @@ describe('test/unit/consumer.js', () => {
   });
 
   it('Creates the consumer with the right arguments', async () => {
-    const simpleConsumerMock = jest.spyOn(kafka, 'SimpleConsumer');
+    const GroupConsumerMock = jest.spyOn(kafka, 'GroupConsumer');
     const topicHandlers = await kafkaConsumer.initConsumer();
-    expect(simpleConsumerMock).toHaveBeenCalledWith({
+    expect(GroupConsumerMock).toHaveBeenCalledWith({
       clientId: `consumer-${process.pid}`,
       connectionString: 'test-url',
       ssl: {
@@ -35,8 +35,8 @@ describe('test/unit/consumer.js', () => {
   });
 
   it('subscribe throws an error', async () => {
-    const simpleConsumerMock = jest.spyOn(kafka, 'SimpleConsumer');
-    simpleConsumerMock.mockImplementationOnce(() => ({
+    const GroupConsumerMock = jest.spyOn(kafka, 'GroupConsumer');
+    GroupConsumerMock.mockImplementationOnce(() => ({
         subscribe: () => {
           throw new Error();
         },
@@ -52,8 +52,8 @@ describe('test/unit/consumer.js', () => {
   });
 
   it('Init throws an error', async () => {
-    const simpleConsumerMock = jest.spyOn(kafka, 'SimpleConsumer');
-    simpleConsumerMock.mockImplementationOnce(() => ({
+    const GroupConsumerMock = jest.spyOn(kafka, 'GroupConsumer');
+    GroupConsumerMock.mockImplementationOnce(() => ({
         subscribe: () => {
         },
 
