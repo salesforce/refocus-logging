@@ -11,6 +11,7 @@
  * Kafka handler utilities
  */
 const logger = require('pino')();
+const Promise = require('bluebird');
 
 // We need to retain the interal 'this' Pino uses
 const loggerTypes = {
@@ -25,7 +26,7 @@ const loggerTypes = {
 
 // The default handler just logs out the message
 const defaultHandler = (messageSet, topic, partition, callback = logger.info) => {
-  messageSet.forEach((m) => {
+  return Promise.each(messageSet, (m) => {
     const key = m.message.key.toString(); // logging level
     const value = JSON.parse(m.message.value.toString());
     const log = {
@@ -39,6 +40,12 @@ const defaultHandler = (messageSet, topic, partition, callback = logger.info) =>
       callback('Logging with unknown key');
       logger.info(log);
     }
+
+    return consumer.commitOffset({ topic: topic,
+      partition: partition,
+      offset: m.offset,
+      metadata: 'optional',
+    });
   });
 };
 

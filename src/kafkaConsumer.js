@@ -11,11 +11,34 @@
  * This starts up a consumer and subscribes to all topics
  */
 const Kafka = require('no-kafka');
-const handler = require('./handler');
 const debug = require('debug')('refocus-logging');
 const config = require('./config').getConfig();
 
 const clientId = 'consumer-' + process.pid;
+
+const defaultHandler = (messageSet, topic, partition, callback = logger.info) => {
+  return Promise.each(messageSet, (m) => {
+    const key = m.message.key.toString(); // logging level
+    const value = JSON.parse(m.message.value.toString());
+    const log = {
+      application: topic,
+      messageTime: value.messageTime,
+      message: value.message,
+    };
+    if (loggerTypes[key]) {
+      loggerTypes[key](log);
+    } else {
+      callback('Logging with unknown key');
+      logger.info(log);
+    }
+
+    return consumer.commitOffset({ topic: topic,
+      partition: partition,
+      offset: m.offset,
+      metadata: 'optional',
+    });
+  });
+};
 
 const initConsumer = async (errorCallback) => {
   try {
@@ -31,26 +54,34 @@ const initConsumer = async (errorCallback) => {
       idleTimeout: config.idleTimeout,
     });
 
-    await consumer.init();
-    debug(`Kafka consumer ${clientId} has been started`);
+    const strategies = [{
+        subscriptions: ['kafka-test-topic'],
+        handler: defaultHandler,
+      },
+    ];
 
-    // Construct an object that has a list of all topics as
-    // keys and accordingly you can give it a handler
-    const topicHandlers = config.topics.reduce((obj, topic) => {
-      obj[topic] = async (handler) => {
-        try {
-          await consumer.subscribe(topic, handler);
-        } catch (err) {
-          errorCallback(`Unable to subscribe to topic ${topic}, error ${err}`);
-        }
-      };
+    await consumer.init(strategies);
 
-      return obj;
-    }, {});
-    let topic;
-    for (topic in topicHandlers) {
-      await topicHandlers[topic](handler(topic));
-    }
+
+    // debug(`Kafka consumer ${clientId} has been started`);
+
+    // // Construct an object that has a list of all topics as
+    // // keys and accordingly you can give it a handler
+    // const topicHandlers = config.topics.reduce((obj, topic) => {
+    //   obj[topic] = async (handler) => {
+    //     try {
+    //       await consumer.subscribe(topic, handler);
+    //     } catch (err) {
+    //       errorCallback(`Unable to subscribe to topic ${topic}, error ${err}`);
+    //     }
+    //   };
+
+    //   return obj;
+    // }, {});
+    // let topic;
+    // for (topic in topicHandlers) {
+    //   await topicHandlers[topic](handler(topic));
+    // }
 
     return {
       topicHandlers,
