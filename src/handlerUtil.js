@@ -28,14 +28,16 @@ const defaultHandler = (messageSet, topic, partition, callback = logger.info) =>
   messageSet.forEach((m) => {
     const key = m.message.key.toString(); // logging level
     const value = JSON.parse(m.message.value.toString());
-
-    // TODO: Discuss different cases and what should be done
+    const log = {
+      application: topic,
+      messageTime: value.messageTime,
+      message: value.message,
+    };
     if (loggerTypes[key]) {
-      loggerTypes[key]('From application: ', topic, ' Message: ', value,
-      ' Received at: ', new Date());
+      loggerTypes[key](log);
     } else {
       callback('Logging with unknown key');
-      logger.info('From application: ', topic, ' Message: ', value, 'Received at: ', new Date());
+      logger.info(log);
     }
   });
 };
