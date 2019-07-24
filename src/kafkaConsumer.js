@@ -56,7 +56,7 @@ const initConsumer = async (errorCallback) => {
     });
 
     const strategies = [{
-        subscriptions: ['kafka-test-topic'],
+        subscriptions: config.topics,
         handler: defaultHandler,
       },
     ];
