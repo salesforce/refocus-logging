@@ -19,7 +19,7 @@ const clientId = 'consumer-' + process.pid;
 
 const initConsumer = async (errorCallback) => {
   try {
-    const consumer = new Kafka.SimpleConsumer({
+    const consumer = new Kafka.GroupConsumer({
       clientId,
       connectionString: config.connectionString,
       ssl: {
