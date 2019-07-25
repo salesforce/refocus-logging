@@ -20,4 +20,8 @@ const errorHandler = (message) => {
   logger.error(message);
 };
 
-consumer.initConsumer(errorHandler);
+try {
+  consumer.initConsumer(errorHandler);
+} catch (err) {
+  
+}
