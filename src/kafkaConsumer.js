@@ -17,27 +17,11 @@ const bluebirdPromise = require('bluebird');
 
 const clientId = 'consumer-' + process.pid;
 
-const defaultHandler = (messageSet, topic, partition, callback = logger.info) => {
-  return bluebirdPromise.each(messageSet, (m) => {
-    const key = m.message.key.toString(); // logging level
-    const value = JSON.parse(m.message.value.toString());
-    const log = {
-      application: topic,
-      messageTime: value.messageTime,
-      message: value.message,
-    };
-    if (loggerTypes[key]) {
-      loggerTypes[key](log);
-    } else {
-      callback('Logging with unknown key');
-      logger.info(log);
-    }
-
-    return consumer.commitOffset({ topic: topic,
-      partition: partition,
-      offset: m.offset,
-      metadata: 'optional',
-    });
+const dataHandler = function (messageSet, topic, partition) {
+  return Promise.each(messageSet, function (m) {
+      console.log(topic, partition, m.offset, m.message.value.toString('utf8'));
+      // commit offset
+      return consumer.commitOffset({topic: topic, partition: partition, offset: m.offset, metadata: 'optional'});
   });
 };
 
@@ -56,11 +40,14 @@ const initConsumer = async (errorCallback) => {
       idleTimeout: config.idleTimeout,
     });
 
-    const strategies = [{
-        subscriptions: config.topics,
-        handler: defaultHandler,
+    const strategies = {
+      subscriptions: ['cimarron-86176.ping'],
+      metadata: {
+        weight: 4,
       },
-    ];
+      strategy: new Kafka.WeightedRoundRobinAssignmentStrategy(),
+      handler: dataHandler,
+    };
 
     await consumer.init(strategies);
   } catch (err) {
