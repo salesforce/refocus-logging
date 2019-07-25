@@ -17,40 +17,6 @@ const bluebirdPromise = require('bluebird');
 
 const clientId = 'group-consumer-1';
 
-const initAdmin = () => {
-  const admin = new Kafka.GroupAdmin();
-  return admin.init().then(function () {
-    return admin.listGroups().then(function (groups) {
-      // [ { groupId: 'no-kafka-admin-test-group', protocolType: 'consumer' } ]
-      return admin.describeGroup('logging-group').then(function (group) {
-          return { error: null,
-            groupId: 'logging-group',
-            state: 'Stable',
-            protocolType: 'consumer',
-            protocol: 'DefaultAssignmentStrategy',
-            members: [{
-              memberId: 'group-consumer-1',
-              clientId: 'group-consumer-1',
-              clientHost: '/192.168.1.4',
-              version: 0,
-              subscriptions: ['cimarron-86176.ping'],
-              memberAssignment: {
-                    _blength: 44,
-                    version: 0,
-                    partitionAssignment: [{
-                      topic: 'cimarron-86176.ping',
-                      partitions: [0, 1, 2, 3, 4], },
-                    ],
-                    metadata: null,
-                  },
-            },
-            ],
-          };
-        });
-    });
-  });
-};
-
 const dataHandler = function (messageSet, topic, partition) {
   return bluebirdPromise.each(messageSet, function (m) {
       console.log(topic, partition, m.offset, m.message.value.toString('utf8'));
@@ -64,7 +30,7 @@ const initConsumer = async (errorCallback) => {
   try {
     const consumer = new Kafka.GroupConsumer({
       clientId,
-      groupId: 'logging-group',
+      groupId: 'cimarron-86176.logging-group',
       connectionString: config.connectionString,
       ssl: {
         cert: config.sslCert,
