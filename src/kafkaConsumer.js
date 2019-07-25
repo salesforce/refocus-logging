@@ -44,6 +44,7 @@ const initConsumer = async (errorCallback) => {
   // try {
   const consumer = new Kafka.GroupConsumer({
     clientId,
+    groupId: 'loggingApplication',
     connectionString: config.connectionString,
     ssl: {
       cert: config.sslCert,
