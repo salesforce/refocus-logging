@@ -41,28 +41,30 @@ const defaultHandler = (messageSet, topic, partition, callback = logger.info) =>
 };
 
 const initConsumer = async (errorCallback) => {
-  // try {
-  const consumer = new Kafka.GroupConsumer({
-    clientId,
-    groupId: 'loggingApplication',
-    connectionString: config.connectionString,
-    ssl: {
-      cert: config.sslCert,
-      key: config.sslKey,
-    },
-    maxWaitTime: config.maxWaitTime,
-    maxBytes: config.maxBytes,
-    idleTimeout: config.idleTimeout,
-  });
+  try {
+    const consumer = new Kafka.GroupConsumer({
+      clientId,
+      groupId: 'loggingApplication',
+      connectionString: config.connectionString,
+      ssl: {
+        cert: config.sslCert,
+        key: config.sslKey,
+      },
+      maxWaitTime: config.maxWaitTime,
+      maxBytes: config.maxBytes,
+      idleTimeout: config.idleTimeout,
+    });
 
-  const strategies = [{
-      subscriptions: config.topics,
-      handler: defaultHandler,
-    },
-  ];
+    const strategies = [{
+        subscriptions: config.topics,
+        handler: defaultHandler,
+      },
+    ];
 
-  await consumer.init(strategies);
-
+    await consumer.init(strategies);
+  } catch (err) {
+    errorCallback(err);
+  }
 
   //   debug(`Kafka consumer ${clientId} has been started`);
 
