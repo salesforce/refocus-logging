@@ -15,7 +15,7 @@ const debug = require('debug')('refocus-logging');
 const config = require('./config').getConfig();
 const bluebirdPromise = require('bluebird');
 
-const clientId = 'group-consumer-1';
+const clientId = 'cimarron-86176.group-consumer-1';
 
 const dataHandler = function (messageSet, topic, partition) {
   return bluebirdPromise.each(messageSet, function (m) {
