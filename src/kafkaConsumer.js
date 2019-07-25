@@ -13,11 +13,12 @@
 const Kafka = require('no-kafka');
 const debug = require('debug')('refocus-logging');
 const config = require('./config').getConfig();
+const bluebirdPromise = require('bluebird');
 
 const clientId = 'consumer-' + process.pid;
 
 const defaultHandler = (messageSet, topic, partition, callback = logger.info) => {
-  return Promise.each(messageSet, (m) => {
+  return bluebirdPromise.each(messageSet, (m) => {
     const key = m.message.key.toString(); // logging level
     const value = JSON.parse(m.message.value.toString());
     const log = {
