@@ -20,9 +20,6 @@ const errorHandler = (message) => {
   logger.error(message);
 };
 
-try {
-  consumer.initAdmin();
+consumer.initAdmin().then(() => {
   consumer.initConsumer(errorHandler);
-} catch (err) {
-  logger.error(error);
-}
+}).catch(logger.error);
