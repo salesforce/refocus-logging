@@ -42,7 +42,7 @@ const defaultHandler = (messageSet, topic, partition, callback = logger.info) =>
 
 const initConsumer = async (errorCallback) => {
   // try {
-  const consumer = new Kafka.SimpleConsumer({
+  const consumer = new Kafka.GroupConsumer({
     clientId,
     connectionString: config.connectionString,
     ssl: {
@@ -52,7 +52,6 @@ const initConsumer = async (errorCallback) => {
     maxWaitTime: config.maxWaitTime,
     maxBytes: config.maxBytes,
     idleTimeout: config.idleTimeout,
-    handlerConcurrency: 1,
   });
 
   const strategies = [{
