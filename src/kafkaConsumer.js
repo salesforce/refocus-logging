@@ -15,7 +15,7 @@ const debug = require('debug')('refocus-logging');
 const config = require('./config').getConfig();
 const bluebirdPromise = require('bluebird');
 
-const clientId = 'cimarron-86176.group-consumer-1';
+const clientId = 'cimarron-86176.my-consumer-group';
 
 const dataHandler = function (messageSet, topic, partition) {
   return bluebirdPromise.each(messageSet, function (m) {
@@ -30,7 +30,7 @@ const initConsumer = async (errorCallback) => {
   try {
     const consumer = new Kafka.GroupConsumer({
       clientId,
-      groupId: 'cimarron-86176.logging-group',
+      groupId: 'cimarron-86176.my-consumer-group',
       connectionString: config.connectionString,
       ssl: {
         cert: config.sslCert,
@@ -48,7 +48,7 @@ const initConsumer = async (errorCallback) => {
 
     await consumer.init(strategies);
   } catch (err) {
-    errorCallback(err);
+    errorCallback(err.message);
   }
 
   //   debug(`Kafka consumer ${clientId} has been started`);
