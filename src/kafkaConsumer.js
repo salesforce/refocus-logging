@@ -115,5 +115,6 @@ const initConsumer = async (errorCallback) => {
 };
 
 module.exports = {
+  initAdmin,
   initConsumer,
 };
