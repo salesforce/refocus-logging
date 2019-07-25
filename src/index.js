@@ -22,4 +22,6 @@ const errorHandler = (message) => {
 
 consumer.initAdmin().then(() => {
   consumer.initConsumer(errorHandler);
-}).catch(logger.error);
+}).catch((error) => {
+  logger.error(error);
+});
