@@ -21,6 +21,7 @@ const errorHandler = (message) => {
 };
 
 consumer.initAdmin().then(() => {
+  console.log('SUCCESS CREATING');
   consumer.initConsumer(errorHandler);
 }).catch((error) => {
   logger.error(error);
