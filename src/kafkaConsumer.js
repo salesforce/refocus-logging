@@ -41,56 +41,56 @@ const defaultHandler = (messageSet, topic, partition, callback = logger.info) =>
 };
 
 const initConsumer = async (errorCallback) => {
-  try {
-    const consumer = new Kafka.GroupConsumer({
-      clientId,
-      connectionString: config.connectionString,
-      ssl: {
-        cert: config.sslCert,
-        key: config.sslKey,
-      },
-      maxWaitTime: config.maxWaitTime,
-      maxBytes: config.maxBytes,
-      idleTimeout: config.idleTimeout,
-      handlerConcurrency: 1,
-    });
+  // try {
+  const consumer = new Kafka.SimpleConsumer({
+    clientId,
+    connectionString: config.connectionString,
+    ssl: {
+      cert: config.sslCert,
+      key: config.sslKey,
+    },
+    maxWaitTime: config.maxWaitTime,
+    maxBytes: config.maxBytes,
+    idleTimeout: config.idleTimeout,
+    handlerConcurrency: 1,
+  });
 
-    const strategies = [{
-        subscriptions: config.topics,
-        handler: defaultHandler,
-      },
-    ];
+  const strategies = [{
+      subscriptions: config.topics,
+      handler: defaultHandler,
+    },
+  ];
 
-    await consumer.init(strategies);
+  await consumer.init(strategies);
 
 
-    // debug(`Kafka consumer ${clientId} has been started`);
+  //   debug(`Kafka consumer ${clientId} has been started`);
 
-    // // Construct an object that has a list of all topics as
-    // // keys and accordingly you can give it a handler
-    // const topicHandlers = config.topics.reduce((obj, topic) => {
-    //   obj[topic] = async (handler) => {
-    //     try {
-    //       await consumer.subscribe(topic, handler);
-    //     } catch (err) {
-    //       errorCallback(`Unable to subscribe to topic ${topic}, error ${err}`);
-    //     }
-    //   };
+  //   // Construct an object that has a list of all topics as
+  //   // keys and accordingly you can give it a handler
+  //   const topicHandlers = config.topics.reduce((obj, topic) => {
+  //     obj[topic] = async (handler) => {
+  //       try {
+  //         await consumer.subscribe(topic, handler);
+  //       } catch (err) {
+  //         errorCallback(`Unable to subscribe to topic ${topic}, error ${err}`);
+  //       }
+  //     };
 
-    //   return obj;
-    // }, {});
-    // let topic;
-    // for (topic in topicHandlers) {
-    //   await topicHandlers[topic](handler(topic));
-    // }
+  //     return obj;
+  //   }, {});
+  //   let topic;
+  //   for (topic in topicHandlers) {
+  //     await topicHandlers[topic](handler(topic));
+  //   }
 
-    return {
-      topicHandlers,
-      consumer,
-    };
-  } catch (err) {
-    errorCallback(`Unable to start consumer error: ${err}`);
-  }
+  //   return {
+  //     topicHandlers,
+  //     consumer,
+  //   };
+  // } catch (err) {
+  //   errorCallback(`Unable to start consumer error: ${err}`);
+  // }
 };
 
 module.exports = {
