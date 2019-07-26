@@ -29,22 +29,22 @@ const loggerTypes = {
 // The default handler just logs out the message
 const loggerHandler = (messageSet, topic, partition, callback = logger.info) => {
   return bluebirdPromise.each(messageSet, (m) => {
-    let key;
-    if (m.message.key) { // key is nullable
-      key = m.message.key.toString(); // logging level
-    }
-
-    const value = JSON.parse(m.message.value.toString());
-    const log = {
-      application: topic,
-      messageTime: value.messageTime,
-      message: value.message,
-    };
-    if (loggerTypes[key]) {
-      loggerTypes[key](log);
-    } else {
-      callback(`Received message with unknown key: ${key}`);
-      logger.info(log);
+    try {
+      const key = m.message.key.toString(); // logging level
+      const value = JSON.parse(m.message.value.toString());
+      const log = {
+        application: topic,
+        messageTime: value.messageTime,
+        message: value.message,
+      };
+      if (loggerTypes[key]) {
+        loggerTypes[key](log);
+      } else {
+        callback(`Received message with unknown key: ${key}`);
+        logger.info(log);
+      }
+    } catch (err) {
+      logger.error(`Could not parse message error: ${err}`);
     }
   });
 };
