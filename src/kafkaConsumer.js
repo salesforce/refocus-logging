@@ -17,14 +17,7 @@ const bluebirdPromise = require('bluebird');
 
 const clientId = 'consumer-' + process.pid;
 
-const dataHandler = function (messageSet, topic, partition) {
-  return bluebirdPromise.each(messageSet, function (m) {
-      console.log(topic, partition, m.offset, m.message.value.toString('utf8'));
-      // commit offset
-      return consumer.commitOffset({
-        topic: topic, partition: partition, offset: m.offset, metadata: 'optional', });
-    });
-};
+
 
 const initConsumer = async (errorCallback) => {
   try {
@@ -40,6 +33,15 @@ const initConsumer = async (errorCallback) => {
       maxBytes: config.maxBytes,
       idleTimeout: config.idleTimeout,
     });
+
+    const dataHandler = function (messageSet, topic, partition) {
+      return bluebirdPromise.each(messageSet, function (m) {
+          console.log(topic, partition, m.offset, m.message.value.toString('utf8'));
+          // commit offset
+          return consumer.commitOffset({
+            topic: topic, partition: partition, offset: m.offset, metadata: 'optional', });
+        });
+    };
 
     const strategies = {
       subscriptions: config.topics,
