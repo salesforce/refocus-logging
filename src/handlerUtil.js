@@ -29,7 +29,11 @@ const loggerTypes = {
 // The default handler just logs out the message
 const loggerHandler = (messageSet, topic, partition, callback = logger.info) => {
   return bluebirdPromise.each(messageSet, (m) => {
-    const key = m.message.key.toString(); // logging level
+    let key;
+    if (m.message.key) { // key is nullable
+      key = m.message.key.toString(); // logging level
+    }
+
     const value = JSON.parse(m.message.value.toString());
     const log = {
       application: topic,
