@@ -11,52 +11,27 @@ const kafka = require('no-kafka');
 jest.mock('no-kafka');
 
 describe('test/unit/consumer.js', () => {
-  it('TopicHandlers gives you an object with mapping from topicName and throws no error',
-    async () => {
-    const { topicHandlers } = await kafkaConsumer.initConsumer();
-    expect(topicHandlers.foo).toBeInstanceOf(Function);
-    expect(topicHandlers.bar).toBeInstanceOf(Function);
-  });
-
   it('Creates the consumer with the right arguments', async () => {
     const GroupConsumerMock = jest.spyOn(kafka, 'GroupConsumer');
     const topicHandlers = await kafkaConsumer.initConsumer();
-    expect(GroupConsumerMock).toHaveBeenCalledWith({
-      clientId: `consumer-${process.pid}`,
-      connectionString: 'test-url',
-      ssl: {
-        cert: 'test-cert',
-        key: 'test-key',
-      },
-      maxWaitTime: 100,
-      maxBytes: (1024 * 1024),
-      idleTimeout: 1000,
-    });
-  });
-
-  it('subscribe throws an error', async () => {
-    const GroupConsumerMock = jest.spyOn(kafka, 'GroupConsumer');
-    GroupConsumerMock.mockImplementationOnce(() => ({
-        subscribe: () => {
-          throw new Error();
+    expect(GroupConsumerMock).toHaveBeenCalledWith(
+      {
+        clientId: `consumer-${process.pid}`,
+        connectionString: 'test-url',
+        groupId: 'test-prefixlogger-group',
+        idleTimeout: 1000,
+        maxBytes: 1048576,
+        maxWaitTime: 100,
+        ssl: {
+          cert: 'test-cert',
+          key: 'test-key',
         },
-
-        init: () => {
-        },
-      })
-    );
-    let output = '';
-    const callback = jest.fn();
-    await kafkaConsumer.initConsumer(callback);
-    expect(callback).toHaveBeenCalled();
+      });
   });
 
   it('Init throws an error', async () => {
     const GroupConsumerMock = jest.spyOn(kafka, 'GroupConsumer');
     GroupConsumerMock.mockImplementationOnce(() => ({
-        subscribe: () => {
-        },
-
         init: () => {
           throw new Error('');
         },

@@ -6,28 +6,24 @@
  * https://opensource.org/licenses/BSD-3-Clause
  */
 
-const { defaultHandler, specialHandlers } = require('../../src/handlerUtil');
+const { loggerHandler } = require('../../src/handlerUtil');
 
-describe('test/unit/handler.js', () => {
-  it('Returns an empty object', () => {
-    expect(specialHandlers()).toEqual({});
-  });
-
-  it('Logs for unknown key', () => {
+describe('test/unit/handlerUtil.js', () => {
+  it('Logs for unknown key', async () => {
     const value = Buffer.from(JSON.stringify({ message: { foo: 'bar' },
       messageTime: new Date(), }));
     const messageSet = [{ message: { key: 'key', value } }];
     const callback = jest.fn();
-    defaultHandler(messageSet, 'foo', 0, callback);
-    expect(callback).toHaveBeenCalledWith('Logging with unknown key');
+    await loggerHandler(messageSet, 'foo', 0, callback);
+    expect(callback).toHaveBeenCalledWith('Received message with unknown key: key');
   });
 
-  it('Logs for existing key', () => {
+  it('Logs for existing key', async () => {
     const value = Buffer.from(JSON.stringify({ message: { foo: 'bar' },
       messageTime: new Date(), }));
     const messageSet = [{ message: { key: 'info', value } }];
     const callback = jest.fn();
-    defaultHandler(messageSet, 'foo', 0, callback);
+    await loggerHandler(messageSet, 'foo', 0, callback);
     expect(callback).not.toHaveBeenCalled();
   });
 });

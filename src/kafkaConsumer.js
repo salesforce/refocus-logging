@@ -13,15 +13,8 @@
 const Kafka = require('no-kafka');
 const debug = require('debug')('refocus-logging');
 const config = require('./config').getConfig();
-const bluebirdPromise = require('bluebird');
-
+const loggerHandler = require('./handlerUtil').loggerHandler;
 const clientId = 'consumer-' + process.pid;
-
-const dataHandler = function (messageSet, topic, partition) {
-  return bluebirdPromise.each(messageSet, function (m) {
-      console.log(topic, partition, m.offset, m.message.value.toString('utf8'));
-    });
-};
 
 const initConsumer = async (errorCallback) => {
   try {
@@ -40,41 +33,15 @@ const initConsumer = async (errorCallback) => {
 
     const strategies = {
       subscriptions: config.topics,
-      handler: dataHandler,
+      handler: loggerHandler,
     };
 
     await consumer.init(strategies);
+
+    debug(`Kafka consumer ${clientId} has been started`);
   } catch (err) {
-    errorCallback(err.message);
+    errorCallback(`Unable to start consumer error: ${err}`);
   }
-
-  //   debug(`Kafka consumer ${clientId} has been started`);
-
-  //   // Construct an object that has a list of all topics as
-  //   // keys and accordingly you can give it a handler
-  //   const topicHandlers = config.topics.reduce((obj, topic) => {
-  //     obj[topic] = async (handler) => {
-  //       try {
-  //         await consumer.subscribe(topic, handler);
-  //       } catch (err) {
-  //         errorCallback(`Unable to subscribe to topic ${topic}, error ${err}`);
-  //       }
-  //     };
-
-  //     return obj;
-  //   }, {});
-  //   let topic;
-  //   for (topic in topicHandlers) {
-  //     await topicHandlers[topic](handler(topic));
-  //   }
-
-  //   return {
-  //     topicHandlers,
-  //     consumer,
-  //   };
-  // } catch (err) {
-  //   errorCallback(`Unable to start consumer error: ${err}`);
-  // }
 };
 
 module.exports = {

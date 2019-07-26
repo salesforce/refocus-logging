@@ -10,8 +10,10 @@
  * src/handlerUtil.js
  * Kafka handler utilities
  */
+
+// jscs:disable requireShorthandArrowFunctions
 const logger = require('pino')();
-const Promise = require('bluebird');
+const bluebirdPromise = require('bluebird');
 
 // We need to retain the interal 'this' Pino uses
 const loggerTypes = {
@@ -25,8 +27,8 @@ const loggerTypes = {
 };
 
 // The default handler just logs out the message
-const defaultHandler = (messageSet, topic, partition, callback = logger.info) => {
-  return Promise.each(messageSet, (m) => {
+const loggerHandler = (messageSet, topic, partition, callback = logger.info) => {
+  return bluebirdPromise.each(messageSet, (m) => {
     const key = m.message.key.toString(); // logging level
     const value = JSON.parse(m.message.value.toString());
     const log = {
@@ -37,30 +39,12 @@ const defaultHandler = (messageSet, topic, partition, callback = logger.info) =>
     if (loggerTypes[key]) {
       loggerTypes[key](log);
     } else {
-      callback('Logging with unknown key');
+      callback(`Received message with unknown key: ${key}`);
       logger.info(log);
     }
-
-    return consumer.commitOffset({ topic: topic,
-      partition: partition,
-      offset: m.offset,
-      metadata: 'optional',
-    });
   });
 };
 
-/*
-  Populate this as required
-  FORMAT:
-  {
-    topic: () => {handler function},
-  }
-*/
-const specialHandlers = () => ({
-
-});
-
 module.exports = {
-  specialHandlers,
-  defaultHandler,
+  loggerHandler,
 };
