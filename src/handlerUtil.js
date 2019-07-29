@@ -35,7 +35,8 @@ const loggerTypes = {
  * @param {String} topic - The topic in the Kafka Cluster
  * @param {int} partition - The partition of the KafkaCluster the message is received from
  * @param {callback} callback - The function to be executed when a message is received with unknown key
- * @returns {bluebirdPromise} Resolved when the handler completes processing the message.
+ * @returns {bluebirdPromise} Resolved when the handler completes processing the message. bluebirdPromise.each
+ * takes in an iterable and returns an array of promise
  */
 const loggerHandler = (messageSet, topic, partition, callback = logger.info) => {
   return bluebirdPromise.each(messageSet, (m) => {
