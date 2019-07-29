@@ -26,7 +26,17 @@ const loggerTypes = {
   silly: logger.trace.bind(logger),
 };
 
-// The default handler just logs out the message
+/**
+ * Handler triggered when a message is received on a @param {String} topic
+ * Logs out the message received on that topic.
+ *
+ * @param {Array} messageSet - The set of messages that are received on this topic at each time 
+ * the handler is triggered
+ * @param {String} topic - The topic in the Kafka Cluster
+ * @param {int} partition - The partition of the KafkaCluster the message is received from
+ * @param {callback} callback - The function to be executed when a message is received with unknown key
+ * @returns {bluebirdPromise} Resolved when the handler completes processing the message.
+ */
 const loggerHandler = (messageSet, topic, partition, callback = logger.info) => {
   return bluebirdPromise.each(messageSet, (m) => {
     try {
