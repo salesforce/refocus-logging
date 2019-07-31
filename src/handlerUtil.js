@@ -11,7 +11,6 @@
  */
 
 const logger = require('pino')();
-const bluebirdPromise = require('bluebird');
 
 // We need to retain the interal 'this' Pino uses
 const loggerTypes = {
@@ -33,8 +32,6 @@ const loggerTypes = {
  * @param {int} partition - The partition of the KafkaCluster the message is received from
  * @param {callback} callback - The function to be executed when a message is received
  * with unknown level
- * @returns {bluebirdPromise} Resolved when the handler completes processing the message.
- * bluebirdPromise.each takes in an iterable and returns an array of promise
  */
 const loggerHandler = (messageSet, topic, partition, callback = logger.warn.bind(logger)) => {
   messageSet.forEach((m) => {
