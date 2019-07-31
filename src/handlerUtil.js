@@ -10,7 +10,6 @@
  * Kafka handler utilities
  */
 
-// jscs:disable requireShorthandArrowFunctions
 const logger = require('pino')();
 const bluebirdPromise = require('bluebird');
 
@@ -37,7 +36,7 @@ const loggerTypes = {
  * @returns {bluebirdPromise} Resolved when the handler completes processing the message.
  * bluebirdPromise.each takes in an iterable and returns an array of promise
  */
-const loggerHandler = (messageSet, topic, partition, callback = logger.info) => {
+const loggerHandler = (messageSet, topic, partition, callback = logger.warn.bind(logger)) => {
   messageSet.forEach((m) => {
     try {
       const value = JSON.parse(m.message.value.toString());
@@ -50,7 +49,7 @@ const loggerHandler = (messageSet, topic, partition, callback = logger.info) => 
       if (loggerTypes[level]) {
         loggerTypes[level](log);
       } else {
-        // callback(`Received message with unknown level: ${level}`);
+        callback(`Received message with unknown level: ${level}`);
         logger.info(log);
       }
     } catch (err) {
