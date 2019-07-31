@@ -34,24 +34,24 @@ const loggerTypes = {
  * the handler is triggered
  * @param {String} topic - The topic in the Kafka Cluster
  * @param {int} partition - The partition of the KafkaCluster the message is received from
- * @param {callback} callback - The function to be executed when a message is received with unknown key
+ * @param {callback} callback - The function to be executed when a message is received with unknown level
  * @returns {bluebirdPromise} Resolved when the handler completes processing the message. bluebirdPromise.each
  * takes in an iterable and returns an array of promise
  */
 const loggerHandler = (messageSet, topic, partition, callback = logger.info) => {
   return bluebirdPromise.each(messageSet, (m) => {
     try {
-      const key = m.message.key.toString(); // logging level
       const value = JSON.parse(m.message.value.toString());
+      const level = value.level;
       const log = {
         application: topic,
         messageTime: value.messageTime,
         message: value.message,
       };
-      if (loggerTypes[key]) {
-        loggerTypes[key](log);
+      if (loggerTypes[level]) {
+        loggerTypes[level](log);
       } else {
-        callback(`Received message with unknown key: ${key}`);
+        callback(`Received message with unknown level: ${level}`);
         logger.info(log);
       }
     } catch (err) {

@@ -10,18 +10,18 @@ const { loggerHandler } = require('../../src/handlerUtil');
 
 describe('test/unit/handlerUtil.js', () => {
   it('Logs for unknown key', async () => {
-    const value = Buffer.from(JSON.stringify({ message: { foo: 'bar' },
+    const value = Buffer.from(JSON.stringify({ message: { foo: 'bar' }, level: 'level',
       messageTime: new Date(), }));
-    const messageSet = [{ message: { key: 'key', value } }];
+    const messageSet = [{ message: { value } }];
     const callback = jest.fn();
     await loggerHandler(messageSet, 'foo', 0, callback);
-    expect(callback).toHaveBeenCalledWith('Received message with unknown key: key');
+    expect(callback).toHaveBeenCalledWith('Received message with unknown level: level');
   });
 
   it('Logs for existing key', async () => {
-    const value = Buffer.from(JSON.stringify({ message: { foo: 'bar' },
+    const value = Buffer.from(JSON.stringify({ message: { foo: 'bar' }, level: 'info',
       messageTime: new Date(), }));
-    const messageSet = [{ message: { key: 'info', value } }];
+    const messageSet = [{ message: { value } }];
     const callback = jest.fn();
     await loggerHandler(messageSet, 'foo', 0, callback);
     expect(callback).not.toHaveBeenCalled();
