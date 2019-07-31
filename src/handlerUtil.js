@@ -33,7 +33,7 @@ const loggerTypes = {
  * @param {callback} callback - The function to be executed when a message is received
  * with unknown level
  */
-const loggerHandler = (messageSet, topic, partition, callback = logger.warn.bind(logger)) => {
+const loggerHandler = (messageSet, topic, partition, callbackFunc = loggerTypes.error) => {
   messageSet.forEach((m) => {
     try {
       const value = JSON.parse(m.message.value.toString());
@@ -46,7 +46,7 @@ const loggerHandler = (messageSet, topic, partition, callback = logger.warn.bind
       if (loggerTypes[level]) {
         loggerTypes[level](log);
       } else {
-        callback(`Received message with unknown level: ${level}`);
+        callbackFunc(`Received message with unknown level: ${level}`);
         logger.info(log);
       }
     } catch (err) {
