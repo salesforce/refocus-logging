@@ -5,7 +5,6 @@
  * For full license text, see LICENSE.txt file in the repo root or
  * https://opensource.org/licenses/BSD-3-Clause
  */
-
 /**
  * src/handlerUtil.js
  * Kafka handler utilities
@@ -27,16 +26,16 @@ const loggerTypes = {
 };
 
 /**
- * Handler triggered when a message is received on a @param {String} topic
+ * Handler triggered when a message is received on a topic
  * Logs out the message received on that topic.
- *
- * @param {Array} messageSet - The set of messages that are received on this topic at each time 
+ * @param {Array} messageSet - The set of messages that are received on this topic at each time
  * the handler is triggered
  * @param {String} topic - The topic in the Kafka Cluster
  * @param {int} partition - The partition of the KafkaCluster the message is received from
- * @param {callback} callback - The function to be executed when a message is received with unknown level
- * @returns {bluebirdPromise} Resolved when the handler completes processing the message. bluebirdPromise.each
- * takes in an iterable and returns an array of promise
+ * @param {callback} callback - The function to be executed when a message is received
+ * with unknown level
+ * @returns {bluebirdPromise} Resolved when the handler completes processing the message.
+ * bluebirdPromise.each takes in an iterable and returns an array of promise
  */
 const loggerHandler = (messageSet, topic, partition, callback = logger.info) => {
   return bluebirdPromise.each(messageSet, (m) => {
