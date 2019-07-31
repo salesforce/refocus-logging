@@ -38,7 +38,7 @@ const loggerTypes = {
  * bluebirdPromise.each takes in an iterable and returns an array of promise
  */
 const loggerHandler = (messageSet, topic, partition, callback = logger.info) => {
-  return bluebirdPromise.each(messageSet, (m) => {
+  messageSet.forEach((m) => {
     try {
       const value = JSON.parse(m.message.value.toString());
       const level = value.level;
