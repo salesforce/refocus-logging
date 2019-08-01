@@ -46,7 +46,8 @@ const loggerHandler = (messageSet, topic, partition, callback) => {
       if (loggerTypes[level]) {
         loggerTypes[level](log);
       } else {
-        (typeof callback === 'function') && callback(`Received message with unknown level: ${level}`);
+        (typeof callback === 'function') &&
+          callback(`Received message with unknown level: ${level}`);
         logger.info(log);
       }
     } catch (err) {
