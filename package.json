@@ -7,7 +7,7 @@
     "integration": "NODE_ENV=integration jest __tests__/integration/",
     "lint": "./node_modules/jscs/bin/jscs src __tests__",
     "start": "node src/.",
-    "test": "NODE_ENV=development && jest __tests__/unit --coverage --coverageDirectory=output/coverage/jest"
+    "test": "NODE_ENV=development npm run lint && jest __tests__/unit --coverage --coverageDirectory=output/coverage/jest"
   },
   "repository": {
     "type": "git",
