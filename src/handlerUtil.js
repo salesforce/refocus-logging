@@ -34,7 +34,7 @@ const loggerTypes = {
  * with unknown level
  */
 const loggerHandler = (messageSet, topic, partition, callback) => {
-  messageSet.forEach(function (m) {
+  messageSet.forEach((m) => {
     try {
       const value = JSON.parse(m.message.value.toString());
       const level = value.level;

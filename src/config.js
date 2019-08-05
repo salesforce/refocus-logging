@@ -39,7 +39,8 @@ const getIdleTimeout = (input) => {
 
 const herokuConfig = {
   prefix: process.env.KAFKA_PREFIX,
-  topics: process.env.TOPICS ? process.env.TOPICS.split(',').map((string) =>
+  topics: process.env.TOPICS ? process.env.TOPICS.split(',').filter((string =>
+    string !== null || string !== '' || string !== undefined)).map((string) =>
     process.env.KAFKA_PREFIX + string.trim()) : [],
   sslCert: process.env.KAFKA_CLIENT_CERT || '.ssl/client.crt',
   sslKey: process.env.KAFKA_CLIENT_CERT_KEY || '.ssl/client.key',
