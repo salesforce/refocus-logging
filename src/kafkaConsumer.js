@@ -16,6 +16,11 @@ const config = require('./config').getConfig();
 const loggerHandler = require('./handlerUtil').loggerHandler;
 const clientId = 'consumer-' + process.pid;
 
+// Only one instance in a consumer group handles a message belonging to its partition
+// Elected group leader will automatically assign partitions between all group members.
+// Each group is composed of many consumer instances for scalability and fault tolerance.
+// This is nothing more than publish-subscribe semantics where the
+// subscriber is a cluster of consumers instead of a single process.
 const initConsumer = async (errorCallback) => {
   try {
     const consumer = new Kafka.GroupConsumer({
