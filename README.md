@@ -68,5 +68,5 @@ to true.
 
 ## Version History
 
-- 1.1.0 Add option for consolidated Refocus logging using Kafka
+- 1.1.0 Add option for consolidated Refocus logging using Kafka, group consumer
 - 1.0.0

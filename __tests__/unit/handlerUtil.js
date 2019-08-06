@@ -6,28 +6,24 @@
  * https://opensource.org/licenses/BSD-3-Clause
  */
 
-const { defaultHandler, specialHandlers } = require('../../src/handlerUtil');
+const { loggerHandler } = require('../../src/handlerUtil');
 
-describe('test/unit/handler.js', () => {
-  it('Returns an empty object', () => {
-    expect(specialHandlers()).toEqual({});
-  });
-
+describe('test/unit/handlerUtil.js', () => {
   it('Logs for unknown key', () => {
-    const value = Buffer.from(JSON.stringify({ message: { foo: 'bar' },
+    const value = Buffer.from(JSON.stringify({ message: { foo: 'bar' }, level: 'level',
       messageTime: new Date(), }));
-    const messageSet = [{ message: { key: 'key', value } }];
+    const messageSet = [{ message: { value } }];
     const callback = jest.fn();
-    defaultHandler(messageSet, 'foo', 0, callback);
-    expect(callback).toHaveBeenCalledWith('Logging with unknown key');
+    loggerHandler(messageSet, 'foo', 0, callback);
+    expect(callback).toHaveBeenCalledWith('Received message with unknown level: level');
   });
 
   it('Logs for existing key', () => {
-    const value = Buffer.from(JSON.stringify({ message: { foo: 'bar' },
+    const value = Buffer.from(JSON.stringify({ message: { foo: 'bar' }, level: 'info',
       messageTime: new Date(), }));
-    const messageSet = [{ message: { key: 'info', value } }];
+    const messageSet = [{ message: { value } }];
     const callback = jest.fn();
-    defaultHandler(messageSet, 'foo', 0, callback);
+    loggerHandler(messageSet, 'foo', 0, callback);
     expect(callback).not.toHaveBeenCalled();
   });
 });

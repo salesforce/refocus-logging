@@ -21,3 +21,4 @@ const errorHandler = (message) => {
 };
 
 consumer.initConsumer(errorHandler);
+

@@ -11,16 +11,23 @@
  * This starts up a consumer and subscribes to all topics
  */
 const Kafka = require('no-kafka');
-const handler = require('./handler');
 const debug = require('debug')('refocus-logging');
 const config = require('./config').getConfig();
-
+const loggerHandler = require('./handlerUtil').loggerHandler;
 const clientId = 'consumer-' + process.pid;
 
+/**
+ * Only one instance in a consumer group handles a message belonging to its partition
+ * Elected group leader will automatically assign partitions between all group members.
+ * Each group is composed of many consumer instances for scalability and fault tolerance.
+ * This is nothing more than publish-subscribe semantics where the
+ * subscriber is a cluster of consumers instead of a single process.
+*/
 const initConsumer = async (errorCallback) => {
   try {
-    const consumer = new Kafka.SimpleConsumer({
+    const consumer = new Kafka.GroupConsumer({
       clientId,
+      groupId: config.prefix + 'logger-group',
       connectionString: config.connectionString,
       ssl: {
         cert: config.sslCert,
@@ -31,31 +38,14 @@ const initConsumer = async (errorCallback) => {
       idleTimeout: config.idleTimeout,
     });
 
-    await consumer.init();
-    debug(`Kafka consumer ${clientId} has been started`);
-
-    // Construct an object that has a list of all topics as
-    // keys and accordingly you can give it a handler
-    const topicHandlers = config.topics.reduce((obj, topic) => {
-      obj[topic] = async (handler) => {
-        try {
-          await consumer.subscribe(topic, handler);
-        } catch (err) {
-          errorCallback(`Unable to subscribe to topic ${topic}, error ${err}`);
-        }
-      };
-
-      return obj;
-    }, {});
-    let topic;
-    for (topic in topicHandlers) {
-      await topicHandlers[topic](handler(topic));
-    }
-
-    return {
-      topicHandlers,
-      consumer,
+    const strategies = {
+      subscriptions: config.topics,
+      handler: loggerHandler,
     };
+
+    await consumer.init(strategies);
+
+    debug(`Kafka consumer ${clientId} has been started`);
   } catch (err) {
     errorCallback(`Unable to start consumer error: ${err}`);
   }
