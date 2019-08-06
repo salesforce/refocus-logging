@@ -37,11 +37,16 @@ const getIdleTimeout = (input) => {
   return idleTimeout;
 };
 
+const toTopicArray = (topics, prefix = '') => {
+  if (!topics) return [];
+  return topics.split(',')
+    .filter(s => s && s.trim())
+    .map(s => prefix + s.trim());
+};
+
 const herokuConfig = {
   prefix: process.env.KAFKA_PREFIX,
-  topics: process.env.TOPICS ? process.env.TOPICS.split(',').filter((string =>
-    string !== null && string !== '' && string !== undefined)).map((string) =>
-    process.env.KAFKA_PREFIX + string.trim()) : [],
+  topics: toTopicArray(process.env.TOPICS, process.env.KAFKA_PREFIX),
   sslCert: process.env.KAFKA_CLIENT_CERT || '.ssl/client.crt',
   sslKey: process.env.KAFKA_CLIENT_CERT_KEY || '.ssl/client.key',
   connectionString: process.env.KAFKA_URL ? process.env.KAFKA_URL.replace(/\+ssl/g, '') : '',
@@ -80,5 +85,6 @@ module.exports = {
     getIdleTimeout,
     herokuConfig,
     devConfig,
+    toTopicArray,
   },
 };

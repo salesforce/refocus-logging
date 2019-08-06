@@ -8,7 +8,8 @@
 
 const config = require('../../src/config');
 const getConfig = config.getConfig;
-const { getMaxWaitTime, getMaxBytes, getIdleTimeout, herokuConfig, devConfig } = config.testExport;
+const { getMaxWaitTime, getMaxBytes, getIdleTimeout, herokuConfig, devConfig, toTopicArray } =
+  config.testExport;
 
 describe('test/unit/config.js helpers', () => {
   it('Returns default values for null, undefined, 0, negative and string values', () => {
@@ -50,5 +51,25 @@ describe('test/unit/config.js getConfig', () => {
     expect(getConfig('production')).toEqual(herokuConfig);
     expect(getConfig('integration')).toEqual(herokuConfig);
     expect(getConfig('staging')).toEqual(herokuConfig);
+  });
+});
+
+describe('test/unit/config.js toTopicArray', () => {
+  it('No args', () => {
+    expect(toTopicArray()).toEqual([]);
+  });
+
+  it('One topic', () => {
+    expect(toTopicArray('foo')).toEqual(['foo']);
+    expect(toTopicArray('foo', 'pfx.')).toEqual(['pfx.foo']);
+  });
+
+  it('Two topics', () => {
+    expect(toTopicArray('foo,bar')).toEqual(['foo', 'bar']);
+    expect(toTopicArray('foo, bar', 'pfx.')).toEqual(['pfx.foo', 'pfx.bar']);
+  });
+
+  it('Extra spaces and commas', () => {
+    expect(toTopicArray(',foo,bar,   ,,')).toEqual(['foo', 'bar']);
   });
 });
