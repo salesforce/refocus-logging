@@ -45,7 +45,7 @@ const toTopicArray = (topics, prefix = '') => {
 };
 
 const herokuConfig = {
-  prefix: process.env.KAFKA_PREFIX,
+  prefix: process.env.KAFKA_PREFIX || '',
   topics: toTopicArray(process.env.TOPICS, process.env.KAFKA_PREFIX),
   sslCert: process.env.KAFKA_CLIENT_CERT || '.ssl/client.crt',
   sslKey: process.env.KAFKA_CLIENT_CERT_KEY || '.ssl/client.key',
