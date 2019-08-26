@@ -27,7 +27,6 @@ the "producer" applications.
 
 ### Configure the Refocus Logging Application
 
-
 Configure the following environment variables in the Refocus Logging
 application:
 
@@ -50,6 +49,12 @@ is issued, defaults to 100ms.
 defaults to 1MB.
 - `KAFKA_CONSUMER_IDLE_TIMEOUT`: Timeout between fetch calls, defaults to
 1000ms.
+
+Note: If you are using one of Heroku's multi-tenant Apache Kafka plans, you must also define the "logger-group" consumer group with the following command:
+
+`heroku kafka:consumer-groups:create logger-group -a YOUR_REFOCUS_LOGGING_APPLICATION`
+
+For more information on this feature, please see https://devcenter.heroku.com/articles/multi-tenant-kafka-on-heroku#consumer-groups.
 
 ### Configure the Producer Applications
 
