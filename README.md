@@ -53,18 +53,7 @@ defaults to 1MB.
 
 ### Configure the Producer Applications
 
-Configure the following environment variables in each of the producer
-applications:
-
-- `KAFKA_CLIENT_CERT`: File path to the file that contains the client
-certificate.
-- `KAFKA_CLIENT_CERT_KEY`: File path to the file that contains the client
-certificate key.
-- `KAFKA_URL`: Your Kafka Cluster URL.
-- `KAFKA_LOGGING`: Set to true to send log lines to the Refocus Logging
-application, defaults to false.
-- `LOCAL_LOGGING`: Set to false if you want to turn off local logging, defaults
-to true.
+See https://github.com/salesforce/refocus-logging-client#configuration.
 
 ## Version History
 
