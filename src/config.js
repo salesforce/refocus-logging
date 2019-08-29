@@ -37,6 +37,15 @@ const getIdleTimeout = (input) => {
   return idleTimeout;
 };
 
+const getAggregatorTimeout = (input) => {
+  const aggregatorTimeout = +input;
+  if (isNaN(aggregatorTimeout) || aggregatorTimeout <= 0) {
+    return 30000;
+  }
+
+  return aggregatorTimeout;
+};
+
 const toTopicArray = (topics, prefix = '') => {
   if (!topics) return [];
   return topics.split(',')
@@ -46,6 +55,7 @@ const toTopicArray = (topics, prefix = '') => {
 
 const herokuConfig = {
   prefix: process.env.KAFKA_PREFIX || '',
+  aggregationTopic: toTopicArray(process.env.AGGREGATION_TOPIC, process.env.KAFKA_PREFIX),
   topics: toTopicArray(process.env.TOPICS, process.env.KAFKA_PREFIX),
   sslCert: process.env.KAFKA_CLIENT_CERT || '.ssl/client.crt',
   sslKey: process.env.KAFKA_CLIENT_CERT_KEY || '.ssl/client.key',
@@ -53,10 +63,13 @@ const herokuConfig = {
   maxWaitTime: getMaxWaitTime(process.env.KAFKA_CONSUMER_MAX_WAIT_TIME_MS),
   maxBytes: getMaxBytes(process.env.KAFKA_CONSUMER_MAX_BYTES),
   idleTimeout: getIdleTimeout(process.env.KAFKA_CONSUMER_IDLE_TIMEOUT),
+  aggregatorTimeout: getAggregatorTimeout(process.env.FLUSH_TO_PERSISTENCE_AFTER),
+  expectedEmits: process.env.NUM_REALTIME_PROCESSES,
 };
 
 const devConfig = {
   prefix: 'test-prefix',
+  aggregationTopic: ['agg-foo'],
   topics: ['foo', 'bar'],
   sslCert: 'test-cert',
   sslKey: 'test-key',
@@ -64,6 +77,7 @@ const devConfig = {
   maxWaitTime: 100,
   maxBytes: (1024 * 1024),
   idleTimeout: 1000,
+  aggregatorTimeout: 30000,
 };
 
 const config = {
