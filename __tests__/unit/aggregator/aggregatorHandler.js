@@ -8,6 +8,7 @@
 
 const { aggregationHandler } = require('../../../src/aggregator/aggregatorHandler');
 const persist = require('../../../src/aggregator/persist');
+const timeout = require('../../../src/config').getConfig().aggregatorTimeout;
 jest.mock('../../../src/aggregator/persist');
 
 jest.useFakeTimers();
@@ -76,9 +77,7 @@ describe('test/unit/aggregator/aggregatorHandler.js', () => {
 
     const persistMock = jest.spyOn(persist, 'persist');
     aggregationHandler(messageSet, 'foo', 0);
-    jest.advanceTimersByTime(40000);
-    console.log(persistMock);
+    jest.advanceTimersByTime(timeout);
     expect(persistMock).toHaveBeenCalledWith(JSON.parse(key.toString()), result);
-
   });
 });
