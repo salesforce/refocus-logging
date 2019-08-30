@@ -8,9 +8,18 @@
 
 const { aggregationHandler } = require('../../../src/aggregator/aggregatorHandler');
 const utils = require('../../../src/aggregator/utils');
-jest.mock('../../../src/aggregator/utils');
 
-describe('test/unit/aggregator/aggregatorHandler.js', () => {
-  it('Calls the right handler', () => {
+describe('test/unit/aggregator/utils.js', () => {
+  it('Happy path: OK', () => {
+    // utils.requestStartedHandler();
+    // utils.publishedHandler();
+    // utils.emittedHandler();
+    // utils.emittedHandler();
+    // utils.emittedHandler();
+
+    // utils.acknowledgedHandler();
+    // utils.acknowledgedHandler();
+    // utils.acknowledgedHandler();
+
   });
 });

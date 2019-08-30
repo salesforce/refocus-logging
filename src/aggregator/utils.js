@@ -1,5 +1,7 @@
-const { aggregatorTimeout, expectedEmits } = require('../config').getConfig();
+const logger = require('pino')();
 const percentile = require('percentile');
+const persist = require('./persist').persist;
+const { aggregatorTimeout, expectedEmits } = require('../config').getConfig();
 
 /**
  * Key = JSON.stringify({
@@ -18,7 +20,18 @@ const getAvg = (input) => {
   return total / input.length;
 };
 
-const flush = (key) => {
+const getMedian = (input) => {
+  if (!Array.isArray(input)) {
+    return;
+  };
+
+  input.sort((a, b) => a - b);
+  const lowMiddle = Math.floor((input.length - 1) / 2);
+  const highMiddle = Math.ceil((input.length - 1) / 2);
+  return ((input[lowMiddle] + input[highMiddle]) / 2);
+};
+
+const flush = async (key) => {
   const {
     reqStartTime,
     jobStartTime,
@@ -37,35 +50,37 @@ const flush = (key) => {
   const avgSubscribeLatency = Array.isArray(emittedAt) ?
     getAvg(emittedAt.map(emitTime => emitTime - publishCompletedAt)) : -1;
 
-  const numEmitted = Array.isArray(emittedAt) ? emittedAt.length : 0;
+  const numSubsMissed = Array.isArray(emittedAt) ? expectedEmits - emittedAt.length : expectedEmits;
 
-  const isSuccessfullyEmitted = numEmitted === expectedEmits ? true : false;
+  const isSuccessfullyEmitted = numSubsMissed === 0 ? true : false;
 
   const numClientsAcknowledged = Array.isArray(acknowledgedAt) ?
     acknowledgedAt.length : 0;
 
-  const endToEndLatency = acknowledgedAt.map(acknowledgeTime =>
-    acknowledgeTime - jobStartTime);
+  const endToEndLatency = Array.isArray(acknowledgedAt) ? acknowledgedAt.map(acknowledgeTime =>
+    acknowledgeTime - jobStartTime) : [];
 
   const avgEndToEndLatency = getAvg(endToEndLatency);
-  const medianEndToEndLatency = percentile(50, endToEndLatency);
-  const ninetyFifthPercentile = percentile(95, endToEndLatency);
+  const ninetyFifthPercentileEndToEndLatency = percentile(95, endToEndLatency);
+  const medianEndToEndLatency = getMedian(endToEndLatency);
 
   const aggregatedVal = {
+    jobStartTime,
     queueTime,
     publishLatency,
     avgSubscribeLatency,
-    numEmitted,
+    numSubsMissed,
     avgEndToEndLatency,
     medianEndToEndLatency,
-    ninetyFifthPercentile,
+    ninetyFifthPercentileEndToEndLatency,
     isPublished,
     isSuccessfullyEmitted,
     numClientsAcknowledged,
   };
 
   const parsedKey = JSON.parse(key);
-  logger.info('Key:', parsedKey, 'Value:', aggregatedVal);
+
+  persist(parsedKey, aggregatedVal);
 };
 
 /**
@@ -76,7 +91,10 @@ const flush = (key) => {
  * }
 */
 const requestStartedHandler = (message, key) => {
-  aggregateMap.set(key, message);
+  aggregateMap.set(key, {
+    reqStartTime: message.reqStartTime,
+    jobStartTime: message.jobStartTime,
+  });
   setTimeout(() => {
     flush(key);
   }, aggregatorTimeout);
@@ -106,8 +124,12 @@ const emittedHandler = (message, key) => {
   if (aggregateMap.has(key)) {
     const { emittedAt, numClientsEmittedTo } = message;
     const aggregateMapVal = aggregateMap.get(key);
-    aggregateMapVal.emittedAt = aggregateMapVal.emittedAt ?
-      aggregateMapVal.emittedAt.push(emittedAt) : [emittedAt];
+    if (aggregateMapVal.emittedAt) {
+      aggregateMapVal.emittedAt.push(emittedAt);
+    } else {
+      aggregateMapVal.emittedAt = [emittedAt];
+    };
+
     aggregateMapVal.numClientsEmittedTo = aggregateMapVal.numClientsEmittedTo + numClientsEmittedTo;
   }
 };
@@ -122,8 +144,11 @@ const acknowledgedHandler = (message, key) => {
   if (aggregateMap.has(key)) {
     const { acknowledgedAt } = message;
     const aggregateMapVal = aggregateMap.get(key);
-    aggregateMapVal.acknowledgedAt = aggregateMapVal.acknowledgedAt ?
-      aggregateMapVal.acknowledgedAt.push(acknowledgedAt) : [acknowledgedAt];
+    if (aggregateMapVal.acknowledgedAt) {
+      aggregateMapVal.acknowledgedAt.push(acknowledgedAt);
+    } else {
+      aggregateMapVal.acknowledgedAt = [acknowledgedAt];
+    };
   }
 };
 
@@ -133,4 +158,6 @@ module.exports = {
   emittedHandler,
   acknowledgedHandler,
   aggregateMap,
+  flush,
+  persist,
 };

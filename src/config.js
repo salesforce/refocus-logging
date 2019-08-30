@@ -64,7 +64,7 @@ const herokuConfig = {
   maxBytes: getMaxBytes(process.env.KAFKA_CONSUMER_MAX_BYTES),
   idleTimeout: getIdleTimeout(process.env.KAFKA_CONSUMER_IDLE_TIMEOUT),
   aggregatorTimeout: getAggregatorTimeout(process.env.FLUSH_TO_PERSISTENCE_AFTER),
-  expectedEmits: process.env.NUM_REALTIME_PROCESSES,
+  expectedEmits: process.env.NUM_REALTIME_PROCESSES || 3,
 };
 
 const devConfig = {
@@ -78,6 +78,7 @@ const devConfig = {
   maxBytes: (1024 * 1024),
   idleTimeout: 1000,
   aggregatorTimeout: 30000,
+  expectedEmits: 3,
 };
 
 const config = {
