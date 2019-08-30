@@ -12,8 +12,8 @@
  */
 const Kafka = require('no-kafka');
 const debug = require('debug')('refocus-aggregation');
-const config = require('./config').getConfig();
-const aggregationHandler = require('./handlerUtil').aggregationHandler;
+const config = require('../config').getConfig();
+const aggregationHandler = require('./aggregatorHandler').aggregationHandler;
 const clientId = 'consumer-' + process.pid;
 
 /**
