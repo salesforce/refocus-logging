@@ -39,7 +39,7 @@ const initConsumer = async (errorCallback) => {
     });
 
     const strategies = [{
-      subscriptions: config.topics,
+      subscriptions: config.aggregationTopic,
       handler: aggregationHandler,
     },
   ];

@@ -60,6 +60,10 @@ To enable aggregation supply the application with the following environment vari
 Note: If you are using one of Heroku's multi-tenant Apache Kafka plans, you must also define the "logger-group" consumer group with the following command:
 
 `heroku kafka:consumer-groups:create logger-group -a YOUR_REFOCUS_LOGGING_APPLICATION`
+ 
+you must also define the "aggregator-group" consumer group with the following command if you want aggregation enabled:
+
+`heroku kafka:consumer-groups:create aggregator-group -a YOUR_REFOCUS_LOGGING_APPLICATION`
 
 For more information on this feature, please see https://devcenter.heroku.com/articles/multi-tenant-kafka-on-heroku#consumer-groups.
 
