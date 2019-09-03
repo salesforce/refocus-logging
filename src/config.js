@@ -10,6 +10,25 @@
  * define config variables
  */
 
+const featureToggles = require('feature-toggles');
+
+/**
+ * Return boolean true if the named environment variable is boolean true or
+ * case-insensitive string 'true'.
+ *
+ * @param {Object} processEnv - The node process environment. (Passing it into
+ *  this function instead of just getting a reference to it *inside* this
+ *  function makes the function easier to test.)
+ * @param {String} environmentVariableName - The name of the environment var.
+ * @returns {Boolean} true if the named environment variable is boolean true or
+ *  case-insensitive string 'true'.
+ */
+const environmentVariableTrue = (processEnv, environmentVariableName) => {
+  const x = processEnv[environmentVariableName];
+  return typeof x !== 'undefined' && x !== null &&
+    x.toString().toLowerCase() === 'true';
+};
+
 const getMaxWaitTime = (input) => {
   const maxWait = +input;
   if (isNaN(maxWait) || maxWait <= 0) {
@@ -87,6 +106,13 @@ const config = {
   production: herokuConfig,
   staging: herokuConfig,
 };
+
+const toggles = {
+  // Log the pub-sub stats
+  logPubSubStats: environmentVariableTrue(process.env, 'LOG_PUBSUB_STATS'),
+}; // toggles
+
+featureToggles.load(toggles);
 
 module.exports = {
   getConfig: (environmentName) => {

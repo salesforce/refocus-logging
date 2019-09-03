@@ -22,6 +22,7 @@
   "homepage": "https://github.com/salesforce/refocus-logging#readme",
   "dependencies": {
     "debug": "^4.1.1",
+    "feature-toggles": "^1.4.0",
     "no-kafka": "^3.4.3",
     "pino": "^5.12.6",
     "stats-lite": "^2.2.0"
