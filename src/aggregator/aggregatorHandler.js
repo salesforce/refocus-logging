@@ -69,9 +69,8 @@ const flush = async (key) => {
     isSuccessfullyEmitted,
     numClientsAcknowledged,
   };
-
   const parsedKey = JSON.parse(key);
-
+  aggregateMap.delete(key);
   persist(parsedKey, aggregatedVal);
 };
 
