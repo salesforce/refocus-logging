@@ -50,6 +50,12 @@ defaults to 1MB.
 - `KAFKA_CONSUMER_IDLE_TIMEOUT`: Timeout between fetch calls, defaults to
 1000ms.
 
+To enable aggregation supply the application with the following environment variables:
+
+- `AGGREGATION_TOPIC`: Topic where pub-sub tracking messages are being produced
+- `FLUSH_TO_PERSISTENCE_AFTER`: Timeout period for aggregated value for each sample
+- `NUM_REALTIME_PROCESSES`: Number of real-time processes being run (this is to calculate if and how many subscribe events did we miss)
+
 Note: If you are using one of Heroku's multi-tenant Apache Kafka plans, you must also define the "logger-group" consumer group with the following command:
 
 `heroku kafka:consumer-groups:create logger-group -a YOUR_REFOCUS_LOGGING_APPLICATION`
@@ -62,5 +68,6 @@ See https://github.com/salesforce/refocus-logging-client#configuration.
 
 ## Version History
 
+- 1.2.0 Add option for aggregating pub sub aggregation logs
 - 1.1.0 Add option for consolidated Refocus logging using Kafka, group consumer
 - 1.0.0
