@@ -1,4 +1,5 @@
 {
+  "addons": ["heroku-postgresql:hobby-dev"],
 	"environments": {
 		"test": {
 			"formation": {
