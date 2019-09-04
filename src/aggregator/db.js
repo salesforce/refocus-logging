@@ -23,28 +23,28 @@ const dbConfigObjectFromDbURL = (dbUrl) => {
   };
 };
 
+let alreadyInitialized = false;
+
 /**
  * Create a dbconfig object from the DB URL.
  * @returns {Promise} - Promise resolved when the function finishes execution
  */
 const initDb = async () => {
   const dbConfig = dbConfigObjectFromDbURL(dbUrl);
-  let alreadyInitialized = false;
   try {
     await pgtools.createdb(dbConfig, dbConfig.name);
   } catch (e) {
     if (e.message.startsWith('Attempted to create a duplicate database')) {
       alreadyInitialized = true;
-      return;
     };
   }
 
   if (!alreadyInitialized) {
     const createTable = `CREATE TABLE ${aggregateTableName}
     (
-        updated_at int,
+        updated_at bigint,
         sample_name text,
-        job_start_time int,
+        job_start_time bigint,
         queue_time smallint,
         publish_latency int,
         avg_subscribe_latency real,
@@ -63,8 +63,6 @@ const initDb = async () => {
     on ${aggregateTableName} (updated_at, sample_name);`);
   }
 };
-
-initDb();
 
 module.exports = {
   db,
