@@ -45,6 +45,7 @@ const initDb = async () => {
         updated_at int,
         sample_name text,
         job_start_time int,
+        queue_time smallint,
         publish_latency int,
         avg_subscribe_latency real,
         num_subs_missed smallint,
@@ -68,4 +69,5 @@ initDb();
 module.exports = {
   db,
   initDb,
+  aggregateTableName,
 };
