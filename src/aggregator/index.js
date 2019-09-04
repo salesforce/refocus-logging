@@ -13,6 +13,7 @@
 const debug = require('debug')('refocus-logging');
 const consumer = require('./kafkaConsumer');
 const logger = require('pino')();
+const initDb = require('./db').initDb;
 
 debug(`Starting client consumer-${process.pid}`);
 
@@ -20,5 +21,7 @@ const errorHandler = (message) => {
   logger.error(message);
 };
 
-consumer.initConsumer(errorHandler);
+initDb().then(() => {
+  consumer.initConsumer(errorHandler);
+});
 
