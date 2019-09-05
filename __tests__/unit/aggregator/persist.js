@@ -27,6 +27,7 @@ describe('test/unit/aggregator/persist.js', () => {
       isPublished: true,
       isSuccessfullyEmitted: true,
       numClientsAcknowledged: 2,
+      numClientsEmittedTo: 4,
     };
     await persist(key, result);
 
@@ -48,6 +49,7 @@ describe('test/unit/aggregator/persist.js', () => {
       queue_time: 2,
       sample_name: 'testSample',
       updated_at: '' + dbUpdatedAt,
+      num_clients_emitted_to: 4,
     };
     expect(res[0][0]).toEqual(expectedRes);
   });

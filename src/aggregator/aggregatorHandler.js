@@ -57,6 +57,8 @@ const flush = async (key) => {
     stats.percentile(endToEndLatency, 0.95) : null;
   const medianEndToEndLatency = endToEndLatency.length > 0 ? stats.median(endToEndLatency) : null;
 
+  console.log(numClientsEmittedTo);
+
   const aggregatedVal = {
     jobStartTime,
     queueTime,
@@ -68,6 +70,7 @@ const flush = async (key) => {
     ninetyFifthPercentileEndToEndLatency,
     isPublished,
     isSuccessfullyEmitted,
+    numClientsEmittedTo: numClientsEmittedTo || 0,
     numClientsAcknowledged,
   };
   const parsedKey = JSON.parse(key);
@@ -122,7 +125,8 @@ const emittedHandler = (message, key) => {
       aggregateMapVal.emittedAt = [emittedAt];
     };
 
-    aggregateMapVal.numClientsEmittedTo = aggregateMapVal.numClientsEmittedTo + numClientsEmittedTo;
+    aggregateMapVal.numClientsEmittedTo = (aggregateMapVal.numClientsEmittedTo || 0)
+    + numClientsEmittedTo;
   }
 };
 

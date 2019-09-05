@@ -41,13 +41,13 @@ describe('test/unit/aggregator/aggregatorHandler.js', () => {
       { type: 'published', publishCompletedAt }, }));
 
     const value3 = Buffer.from(JSON.stringify({ message:
-      { type: 'emitted', emittedAt: emittedAt1 }, }));
+      { type: 'emitted', emittedAt: emittedAt1, numClientsEmittedTo: 2 }, }));
 
     const value4 = Buffer.from(JSON.stringify({ message:
-      { type: 'emitted', emittedAt: emittedAt2 }, }));
+      { type: 'emitted', emittedAt: emittedAt2, numClientsEmittedTo: 3 }, }));
 
     const value5 = Buffer.from(JSON.stringify({ message:
-      { type: 'emitted', emittedAt: emittedAt3 }, }));
+      { type: 'emitted', emittedAt: emittedAt3, numClientsEmittedTo: 1 }, }));
 
     const value6 = Buffer.from(JSON.stringify({ message:
       { type: 'acknowledged', acknowledgedAt: acknowledgedAt1 }, }));
@@ -77,6 +77,7 @@ describe('test/unit/aggregator/aggregatorHandler.js', () => {
       isPublished: true,
       isSuccessfullyEmitted: true,
       numClientsAcknowledged: 2,
+      numClientsEmittedTo: 6,
     };
 
     const persistMock = jest.spyOn(persist, 'persist');
@@ -108,13 +109,13 @@ describe('test/unit/aggregator/aggregatorHandler.js', () => {
       { type: 'published', publishCompletedAt }, }));
 
     const value3 = Buffer.from(JSON.stringify({ message:
-      { type: 'emitted', emittedAt: emittedAt1 }, }));
+      { type: 'emitted', emittedAt: emittedAt1, numClientsEmittedTo: 2 }, }));
 
     const value4 = Buffer.from(JSON.stringify({ message:
-      { type: 'emitted', emittedAt: emittedAt2 }, }));
+      { type: 'emitted', emittedAt: emittedAt2, numClientsEmittedTo: 3 }, }));
 
     const value5 = Buffer.from(JSON.stringify({ message:
-      { type: 'emitted', emittedAt: emittedAt3 }, }));
+      { type: 'emitted', emittedAt: emittedAt3, numClientsEmittedTo: 1 }, }));
 
     const value6 = Buffer.from(JSON.stringify({ message:
       { type: 'acknowledged', acknowledgedAt: acknowledgedAt1 }, }));
@@ -141,6 +142,7 @@ describe('test/unit/aggregator/aggregatorHandler.js', () => {
       isPublished: true,
       isSuccessfullyEmitted: false,
       numClientsAcknowledged: 0,
+      numClientsEmittedTo: 5,
     };
     const persistMock = jest.spyOn(persist, 'persist');
     aggregationHandler(messageSet, 'foo', 0);

@@ -54,6 +54,7 @@ const initDb = async () => {
         ninety_fifth_percentile_end_to_end_latency real,
         is_published bool,
         is_successfully_emitted bool,
+        num_clients_emitted_to smallint,
         num_clients_acknowledged smallint
     );`;
 
