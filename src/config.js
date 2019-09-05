@@ -111,7 +111,6 @@ const devConfig = {
   expectedEmits: 3,
   dbUrl: pe.DATABASE_URL || defaultDbUrl,
   aggregateTableName: 'aggregates',
-
 };
 
 const config = {
