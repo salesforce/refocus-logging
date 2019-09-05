@@ -3,7 +3,9 @@ const { dbUrl, aggregateTableName } = require('../config').getConfig();
 const pgtools = require('pgtools');
 const url = require('url');
 
-const db = new Sequelize(dbUrl);
+const db = new Sequelize(dbUrl, {
+  logging: false,
+});
 
 /**
  * Create a dbconfig object from the DB URL.

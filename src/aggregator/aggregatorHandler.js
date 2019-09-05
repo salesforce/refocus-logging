@@ -57,8 +57,6 @@ const flush = async (key) => {
     stats.percentile(endToEndLatency, 0.95) : null;
   const medianEndToEndLatency = endToEndLatency.length > 0 ? stats.median(endToEndLatency) : null;
 
-  console.log(numClientsEmittedTo);
-
   const aggregatedVal = {
     jobStartTime,
     queueTime,
