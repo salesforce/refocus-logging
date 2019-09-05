@@ -37,7 +37,7 @@ const flush = async (key) => {
 
   const isPublished = publishCompletedAt ? true : false;
 
-  const publishLatency = publishCompletedAt - jobStartTime;
+  const publishLatency = isPublished ? publishCompletedAt - jobStartTime : null;
 
   const avgSubscribeLatency = Array.isArray(emittedAt) ?
     stats.mean(emittedAt.map(emitTime => emitTime - publishCompletedAt)) : null;
@@ -52,9 +52,10 @@ const flush = async (key) => {
   const endToEndLatency = Array.isArray(acknowledgedAt) ? acknowledgedAt.map(acknowledgeTime =>
     acknowledgeTime - jobStartTime) : [];
 
-  const avgEndToEndLatency = stats.mean(endToEndLatency);
-  const ninetyFifthPercentileEndToEndLatency = stats.percentile(endToEndLatency, 0.95);
-  const medianEndToEndLatency = stats.median(endToEndLatency);
+  const avgEndToEndLatency = endToEndLatency.length > 0 ? stats.mean(endToEndLatency) : null;
+  const ninetyFifthPercentileEndToEndLatency = endToEndLatency.length > 0 ?
+    stats.percentile(endToEndLatency, 0.95) : null;
+  const medianEndToEndLatency = endToEndLatency.length > 0 ? stats.median(endToEndLatency) : null;
 
   const aggregatedVal = {
     jobStartTime,
