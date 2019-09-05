@@ -109,7 +109,7 @@ const devConfig = {
   idleTimeout: 1000,
   aggregatorTimeout: 30000,
   expectedEmits: 3,
-  dbUrl: defaultDbUrl,
+  dbUrl: pe.DATABASE_URL || defaultDbUrl,
   aggregateTableName: 'aggregates',
 
 };
