@@ -30,8 +30,6 @@ const persist = async (parsedKey, val) => {
     ${medianEndToEndLatency}, ${ninetyFifthPercentileEndToEndLatency}, ${isPublished},
     ${isSuccessfullyEmitted}, ${numClientsEmittedTo}, ${numClientsAcknowledged}`;
 
-  logger.info('The key updated_at, sampleName is:' + epochSampleTime + ', ' + sampleName);
-
   try {
     const res = await db.query(`INSERT INTO ${aggregateTableName} (updated_at, sample_name,
       job_start_time, queue_time, publish_latency, avg_subscribe_latency, num_subs_missed,

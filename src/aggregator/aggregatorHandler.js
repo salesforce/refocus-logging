@@ -18,7 +18,7 @@ const { aggregatorTimeout, expectedEmits } = require('../config').getConfig();
 /**
  * Key = JSON.stringify({
  *  updatedAt,
- *  name,
+ *  sampleName,
  * });
  */
 const aggregateMap = new Map();

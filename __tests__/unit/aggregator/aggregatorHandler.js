@@ -21,7 +21,7 @@ describe('test/unit/aggregator/aggregatorHandler.js', () => {
   it('end-to-end OK', () => {
     const key = Buffer.from(JSON.stringify({
       updatedAt: new Date().toISOString(),
-      name: 'testSample',
+      sampleName: 'testSample',
     }));
 
     const reqStartTime = Date.now();
@@ -89,7 +89,7 @@ describe('test/unit/aggregator/aggregatorHandler.js', () => {
   it('Does not include messages received after timeout', () => {
     const key = Buffer.from(JSON.stringify({
       updatedAt: new Date().toISOString(),
-      name: 'testSample',
+      sampleName: 'testSample',
     }));
 
     const reqStartTime = Date.now();

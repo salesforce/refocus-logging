@@ -11,7 +11,7 @@ describe('test/unit/aggregator/persist.js', () => {
     const updatedAt  = new Date().toISOString();
     const key = {
       updatedAt,
-      name: 'testSample',
+      sampleName: 'testSample',
     };
 
     const jobStartTime = Date.now();
