@@ -9,7 +9,7 @@ const persist = async (parsedKey, val) => {
   }
 
   const epochSampleTime = Date.parse(parsedKey.updatedAt);
-  const sampleName = parsedKey.name;
+  const sampleName = parsedKey.sampleName;
   const {
     jobStartTime,
     queueTime,
