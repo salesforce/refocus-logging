@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const { dbUrl, aggregateTableName } = require('../config').getConfig();
 const pgtools = require('pgtools');
 const url = require('url');
+const logger = require('pino')();
 
 const db = new Sequelize(dbUrl, {
   logging: false,
@@ -36,6 +37,7 @@ const initDb = async () => {
   try {
     await pgtools.createdb(dbConfig, dbConfig.name);
   } catch (e) {
+    logger.error();
     if (e.message.startsWith('Attempted to create a duplicate database')) {
       alreadyInitialized = true;
     };

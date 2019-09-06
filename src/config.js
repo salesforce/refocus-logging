@@ -94,7 +94,7 @@ const herokuConfig = {
   aggregatorTimeout: getAggregatorTimeout(pe.FLUSH_TO_PERSISTENCE_AFTER),
   expectedEmits: pe.NUM_REALTIME_PROCESSES || 3,
   dbUrl: pe.DATABASE_URL,
-  aggregateTableName: pe.AGGREGATE_TABLE_NAME,
+  aggregateTableName: pe.AGGREGATE_TABLE_NAME || 'aggregates',
 };
 
 const devConfig = {
