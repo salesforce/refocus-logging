@@ -22,6 +22,9 @@ const errorHandler = (message) => {
 };
 
 initDb().then(() => {
+  logger.info('DB has been initialized');
   consumer.initConsumer(errorHandler);
+}).catch(() => {
+  logger.info('DB intialize failed');
 });
 

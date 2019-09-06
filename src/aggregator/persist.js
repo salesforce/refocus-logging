@@ -1,5 +1,6 @@
 const featureToggles = require('feature-toggles');
 const { db, aggregateTableName } = require('./db');
+const logger = require('pino')();
 
 const persist = async (parsedKey, val) => {
   if (featureToggles.isFeatureEnabled('logPubSubStats')) {
@@ -30,12 +31,16 @@ const persist = async (parsedKey, val) => {
     ${medianEndToEndLatency}, ${ninetyFifthPercentileEndToEndLatency}, ${isPublished},
     ${isSuccessfullyEmitted}, ${numClientsEmittedTo}, ${numClientsAcknowledged}`;
 
-  const res = await db.query(`INSERT INTO ${aggregateTableName} (updated_at, sample_name,
-    job_start_time, queue_time, publish_latency, avg_subscribe_latency, num_subs_missed,
-    avg_end_to_end_latency, median_end_to_end_latency, ninety_fifth_percentile_end_to_end_latency,
-    is_published, is_successfully_emitted, num_clients_emitted_to, num_clients_acknowledged)
-  VALUES (${dbLine});`);
-  return res;
+  try {
+    const res = await db.query(`INSERT INTO ${aggregateTableName} (updated_at, sample_name,
+      job_start_time, queue_time, publish_latency, avg_subscribe_latency, num_subs_missed,
+      avg_end_to_end_latency, median_end_to_end_latency, ninety_fifth_percentile_end_to_end_latency,
+      is_published, is_successfully_emitted, num_clients_emitted_to, num_clients_acknowledged)
+    VALUES (${dbLine});`);
+    return res;
+  } catch (e) {
+    logger.info(`Insert failed ${e.message}`);
+  }
 };
 
 module.exports = {
