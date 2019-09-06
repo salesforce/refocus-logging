@@ -63,7 +63,6 @@ const initDb = async () => {
 
   await db.query(`CREATE UNIQUE INDEX range_query_index
   on ${aggregateTableName} (updated_at, sample_name);`);
-  
 };
 
 module.exports = {
