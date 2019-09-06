@@ -37,7 +37,7 @@ const initDb = async () => {
   try {
     await pgtools.createdb(dbConfig, dbConfig.name);
   } catch (e) {
-    logger.error();
+    logger.error(`Error in init db: ${e}`);
     if (e.message.startsWith('Attempted to create a duplicate database')) {
       alreadyInitialized = true;
     };
