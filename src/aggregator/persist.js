@@ -39,7 +39,7 @@ const persist = async (parsedKey, val) => {
     VALUES (${dbLine});`);
     return res;
   } catch (e) {
-    logger.info(`Insert failed ${e.message}`);
+    logger.info(`Insert failed ${e}`);
   }
 };
 
