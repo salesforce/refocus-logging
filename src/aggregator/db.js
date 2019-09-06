@@ -38,35 +38,32 @@ const initDb = async () => {
     await pgtools.createdb(dbConfig, dbConfig.name);
   } catch (e) {
     logger.error(`Error in init db: ${e}`);
-    if (e.message.startsWith('Attempted to create a duplicate database')) {
-      alreadyInitialized = true;
-    };
+    return;
   }
 
-  if (!alreadyInitialized) {
-    const createTable = `CREATE TABLE ${aggregateTableName}
-    (
-        updated_at bigint,
-        sample_name text,
-        job_start_time bigint,
-        queue_time smallint,
-        publish_latency int,
-        avg_subscribe_latency real,
-        num_subs_missed smallint,
-        avg_end_to_end_latency real,
-        median_end_to_end_latency real,
-        ninety_fifth_percentile_end_to_end_latency real,
-        is_published bool,
-        is_successfully_emitted bool,
-        num_clients_emitted_to smallint,
-        num_clients_acknowledged smallint
-    );`;
+  const createTable = `CREATE TABLE ${aggregateTableName}
+  (
+      updated_at bigint,
+      sample_name text,
+      job_start_time bigint,
+      queue_time smallint,
+      publish_latency int,
+      avg_subscribe_latency real,
+      num_subs_missed smallint,
+      avg_end_to_end_latency real,
+      median_end_to_end_latency real,
+      ninety_fifth_percentile_end_to_end_latency real,
+      is_published bool,
+      is_successfully_emitted bool,
+      num_clients_emitted_to smallint,
+      num_clients_acknowledged smallint
+  );`;
 
-    await db.query(createTable);
+  await db.query(createTable);
 
-    await db.query(`CREATE UNIQUE INDEX range_query_index
-    on ${aggregateTableName} (updated_at, sample_name);`);
-  }
+  await db.query(`CREATE UNIQUE INDEX range_query_index
+  on ${aggregateTableName} (updated_at, sample_name);`);
+  
 };
 
 module.exports = {
