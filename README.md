@@ -1,5 +1,7 @@
 # refocus-logging
 
+Note: this repository is infrequently maintained.
+
 Common logging service for Refocus and its associated services using
 [Apache Kafka](https://kafka.apache.org/). 
 
