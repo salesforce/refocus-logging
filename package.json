@@ -22,7 +22,7 @@
   "dependencies": {
     "debug": "^4.1.1",
     "no-kafka": "^3.4.3",
-    "pino": "^5.12.6"
+    "pino": "^5.17.0"
   },
   "devDependencies": {
     "jest": "^24.8.0",
